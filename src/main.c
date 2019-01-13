@@ -24,5 +24,37 @@
 
 int main (void)
 {
-	printf("hello, world\n");
+	#define BALL_HEIGHT 1
+	#define BALL_WIDTH 1
+	#define FIELD_WIDTH 80
+	#define FIELD_HEIGHT 50
+	#define PADDLE_HEIGHT 8
+	#define PADDLE_WIDTH 1
+
+	double ball_coord_x = (FIELD_WIDTH / 2.0) - (BALL_WIDTH / 2.0);
+	double ball_coord_y = (FIELD_HEIGHT / 2.0) - (BALL_HEIGHT / 2.0);
+	double ball_speed_x = -20.0;
+	double ball_speed_y = 0.0;
+
+	double paddle_l_coord_x = 8.0;
+	double paddle_l_coord_y = (FIELD_HEIGHT / 2.0) - (PADDLE_HEIGHT / 2.0);
+
+	double paddle_r_coord_x = FIELD_WIDTH - PADDLE_WIDTH - 8.0;
+	double paddle_r_coord_y = (FIELD_HEIGHT / 2.0) - (PADDLE_HEIGHT / 2.0);
+
+	int score_1 = 0;
+	int score_2 = 0;
+
+	printf("%s: %f\n%s: %f\n%s: %f\n%s: %f\n%s: %f\n%s: %f\n%s: %f\n%s: %f\n%s: %i\n%s: %i\n",
+		"ball_coord_x", ball_coord_x,
+		"ball_coord_y", ball_coord_y,
+		"ball_speed_x", ball_speed_x,
+		"ball_speed_y", ball_speed_y,
+		"paddle_l_coord_x", paddle_l_coord_x,
+		"paddle_l_coord_y", paddle_l_coord_y,
+		"paddle_r_coord_x", paddle_r_coord_x,
+		"paddle_r_coord_y", paddle_r_coord_y,
+		"score_1", score_1,
+		"score_2", score_2
+	);
 }
