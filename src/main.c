@@ -21,36 +21,7 @@
  */
 
 #include <curses.h>
-
-/*
- * Draws a rectangle to a curses window, using half-height characters to double
- * the vertical resolution.
- */
-void draw_rect (WINDOW *window, int rect_y, int rect_x, int rect_height, int rect_width)
-{
-	#define HEIGHT_RATIO 2
-
-	for (int x_index = 0; x_index < rect_width; x_index++) {
-		for (int y_index = 0; y_index < rect_height; y_index++) {
-
-			wmove(window, (rect_y + y_index) / HEIGHT_RATIO, rect_x + x_index);
-
-			if ((rect_y + y_index) == 0 || ! ((rect_y + y_index) % HEIGHT_RATIO)) {
-				if (rect_height - y_index >= HEIGHT_RATIO) {
-					waddch(window, ':'); /* full */
-					y_index++;
-				}
-				else {
-					waddch(window, '`'); /* top-half */
-				}
-			}
-			else {
-				waddch(window, ','); /* bottom-half */
-			}
-
-		}
-	}
-}
+#include "gfx/draw.h"
 
 int main (void)
 {
