@@ -24,5 +24,6 @@ ROOT="$(cd "$(dirname "${0}")"; pwd)"
 
 command c99 \
 	-o "${ROOT}/../build/termpong" \
+	-l 'curses' \
 	"${ROOT}/main.c" \
 	;
