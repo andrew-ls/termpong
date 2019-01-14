@@ -20,10 +20,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this file. If not, see <https://www.gnu.org/licenses/>.
 
-ROOT="$(cd "$(dirname "${0}")"; pwd)"
+ROOT="$(cd "$(dirname "${0}")"; pwd)/.."
 
-command c99 \
-	-o "${ROOT}/../build/termpong" \
-	-l 'curses' \
-	"${ROOT}/main.c" \
-	;
+"${ROOT}/build/build" \
+&& "${ROOT}/bin/termpong"
