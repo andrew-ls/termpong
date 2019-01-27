@@ -21,6 +21,7 @@
  */
 
 #include <curses.h>
+#include <locale.h>
 #include "gfx/draw.h"
 
 int main (void)
@@ -49,6 +50,7 @@ int main (void)
 	/*
 	 * Initialize curses.
 	 */
+	setlocale(LC_ALL, "C.UTF8");
 	initscr();
 	noecho();
 	curs_set(0);

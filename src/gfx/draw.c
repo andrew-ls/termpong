@@ -20,7 +20,13 @@
  * along with this file. If not, see <https://www.gnu.org/licenses/>.
  */
 
+/*
+ * Enable ENHANCED CURSES features (such as widechar support).
+ */
+#define _XOPEN_SOURCE_EXTENDED 1
+
 #include <curses.h>
+#include <stddef.h>
 
 void draw_rect (WINDOW *, int, int, int, int);
 
@@ -38,25 +44,35 @@ void draw_rect (
 {
 	#define HEIGHT_RATIO 2
 
+	const wchar_t *block_bottom_half = L"\u2584";
+	const wchar_t *block_top_half = L"\u2580";
+	const wchar_t *block_full = L"\u2588";
+
 	for (int x_index = 0; x_index < rect_width; x_index++) {
 		for (int y_index = 0; y_index < rect_height; y_index++) {
 
 			wmove(window, (rect_y + y_index) / HEIGHT_RATIO, rect_x + x_index);
 
+			/*
+			 * FIXME: Replace `waddwstr` with `wadd_wch`.
+			 * Currently using string drawing curses function (`waddwstr`) as
+			 * I don't know how to use `wadd_wch` without corruption following
+			 * the printed character (might be `wchar_t` size issue).
+			 */
 			if (
 				(rect_y + y_index) == 0
 				|| ! ((rect_y + y_index) % HEIGHT_RATIO)
 			) {
 				if (rect_height - y_index >= HEIGHT_RATIO) {
-					waddch(window, ':'); /* full */
+					waddwstr(window, block_full);
 					y_index++;
 				}
 				else {
-					waddch(window, '`'); /* top-half */
+					waddwstr(window, block_top_half);
 				}
 			}
 			else {
-				waddch(window, ','); /* bottom-half */
+				waddwstr(window, block_bottom_half);
 			}
 
 		}
