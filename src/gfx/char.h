@@ -20,8 +20,8 @@
  * along with this file. If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef INCLUDE_GFX_DRAW_H
-#define INCLUDE_GFX_DRAW_H
+#ifndef INCLUDE_GFX_CHAR_H
+#define INCLUDE_GFX_CHAR_H
 
 #include <curses.h>
 
@@ -29,7 +29,7 @@
  * Draws a rectangle to a curses window, using half-height characters to double
  * the vertical resolution.
  */
-void draw_rect (
+void char_drawrect (
 	WINDOW *window,
 	int rect_y,
 	int rect_x,

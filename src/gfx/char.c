@@ -28,13 +28,13 @@
 #include <curses.h>
 #include <stddef.h>
 
-void draw_rect (WINDOW *, int, int, int, int);
+void char_drawrect (WINDOW *, int, int, int, int);
 
 /*
  * Draws a rectangle to a curses window, using half-height characters to double
  * the vertical resolution.
  */
-void draw_rect (
+void char_drawrect (
 	WINDOW *window,
 	int rect_y,
 	int rect_x,

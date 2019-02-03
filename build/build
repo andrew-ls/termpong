@@ -27,5 +27,5 @@ command c99 \
 	-l 'cursesw' \
 	-I "${ROOT}/src" \
 	"${ROOT}/src/main.c" \
-	"${ROOT}/src/gfx/draw.c" \
+	"${ROOT}/src/gfx/char.c" \
 	;
