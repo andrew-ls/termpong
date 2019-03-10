@@ -23,6 +23,7 @@
 #include <curses.h>
 #include <locale.h>
 #include "gfx/char.h"
+#include "mgr/time.h"
 
 int main (void)
 {
@@ -61,31 +62,44 @@ int main (void)
 	WINDOW *field = newwin(FIELD_HEIGHT, FIELD_WIDTH, 0, 0);
 
 	/*
-	 * Draw paddles and ball to playing field window.
+	 * Loop game ticks until SIGINT, then terminate curses.
 	 */
-	char_drawrect(field,
-		(int) paddle_l_coord_y,
-		(int) paddle_l_coord_x,
-		PADDLE_HEIGHT,
-		PADDLE_WIDTH
-	);
-	char_drawrect(field,
-		(int) paddle_r_coord_y,
-		(int) paddle_r_coord_x,
-		PADDLE_HEIGHT,
-		PADDLE_WIDTH
-	);
-	char_drawrect(field,
-		(int) ball_coord_y,
-		(int) ball_coord_x,
-		BALL_HEIGHT,
-		BALL_WIDTH
-	);
+	while (1) {
+		/*
+		 * Perform a game tick.
+		 * The first game tick will have a time delta of 0.
+		 */
+		time_tick();
 
-	/*
-	 * Render playing field window, loop until SIGINT, then terminate curses.
-	 */
-	wrefresh(field);
-	while (1) {}
+		/*
+		 * Move ball, scaled by the time delta for this game tick.
+		 */
+		ball_coord_x += ball_speed_x * time_delta();
+		ball_coord_y += ball_speed_y * time_delta();
+
+		/*
+		 * Draw paddles and ball to playing field window.
+		 */
+		werase(field);
+		char_drawrect(field,
+			(int) paddle_l_coord_y,
+			(int) paddle_l_coord_x,
+			PADDLE_HEIGHT,
+			PADDLE_WIDTH
+		);
+		char_drawrect(field,
+			(int) paddle_r_coord_y,
+			(int) paddle_r_coord_x,
+			PADDLE_HEIGHT,
+			PADDLE_WIDTH
+		);
+		char_drawrect(field,
+			(int) ball_coord_y,
+			(int) ball_coord_x,
+			BALL_HEIGHT,
+			BALL_WIDTH
+		);
+		wrefresh(field);
+	}
 	endwin();
 }
