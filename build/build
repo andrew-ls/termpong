@@ -25,6 +25,7 @@ ROOT="$(cd "$(dirname "${0}")"; pwd)/.."
 command c99 \
 	-o "${ROOT}/bin/termpong" \
 	-l 'cursesw' \
+	-l 'm' \
 	-l 'rt' \
 	-I "${ROOT}/src" \
 	"${ROOT}/src/main.c" \
