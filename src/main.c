@@ -23,6 +23,7 @@
 #include <curses.h>
 #include <locale.h>
 #include <math.h>
+#include <stdbool.h>
 #include "gfx/char.h"
 #include "mgr/time.h"
 
@@ -39,6 +40,7 @@ int main (void)
 	double ball_coord_y = (FIELD_HEIGHT / 2.0) - (BALL_HEIGHT / 2.0);
 	double ball_speed_x = -20.0;
 	double ball_speed_y = 0.0;
+	bool ball_passed_paddle = false;
 
 	double paddle_l_coord_x = 8.0;
 	double paddle_l_coord_y = (FIELD_HEIGHT / 2.0) - (PADDLE_HEIGHT / 2.0);
@@ -77,6 +79,44 @@ int main (void)
 		 */
 		ball_coord_x += ball_speed_x * time_delta();
 		ball_coord_y += ball_speed_y * time_delta();
+
+		/*
+		 * Bounce the ball off the paddles.
+		 */
+		if (! ball_passed_paddle) {
+			if (ball_coord_x < paddle_l_coord_x + PADDLE_WIDTH) {
+				if (
+					ball_coord_y > paddle_l_coord_y
+					&& ball_coord_y + BALL_HEIGHT
+						< paddle_l_coord_y + PADDLE_HEIGHT
+				) {
+					/*
+					 * The ball's movement beyond the paddle is added to the
+					 * rebound.
+					 */
+					ball_coord_x = (paddle_l_coord_x + PADDLE_WIDTH) * 2
+						- ball_coord_x;
+					ball_speed_x *= -1;
+				}
+				else {
+					ball_passed_paddle = true;
+				}
+			}
+			else if (ball_coord_x + BALL_WIDTH > paddle_r_coord_x) {
+				if (
+					ball_coord_y > paddle_r_coord_y
+					&& ball_coord_y + BALL_HEIGHT
+						< paddle_r_coord_y + PADDLE_HEIGHT
+				) {
+					ball_coord_x = (paddle_r_coord_x - BALL_WIDTH) * 2
+						- ball_coord_x;
+					ball_speed_x *= -1;
+				}
+				else {
+					ball_passed_paddle = true;
+				}
+			}
+		}
 
 		/*
 		 * Draw paddles and ball to playing field window.
