@@ -81,6 +81,21 @@ int main (void)
 		ball_coord_y += ball_speed_y * time_delta();
 
 		/*
+		 * Bounce the ball off the walls.
+		 */
+		if (ball_coord_y < 0) {
+			/*
+			 * The ball's movement beyond the field is added to the rebound.
+			 */
+			ball_coord_y = 0 - ball_coord_y;
+			ball_speed_y *= -1;
+		}
+		else if (ball_coord_y + BALL_HEIGHT > FIELD_HEIGHT) {
+			ball_coord_y = (FIELD_HEIGHT * 2) - ball_coord_y - BALL_HEIGHT;
+			ball_speed_y *= -1;
+		}
+
+		/*
 		 * Bounce the ball off the paddles.
 		 */
 		if (! ball_passed_paddle) {
