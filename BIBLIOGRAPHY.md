@@ -7,6 +7,8 @@ development of this project.
 
 * The C Programming Language (Second Edition) (1988)  
   _Brian W. Kernighan, Dennis M. Ritchie_
+* The Practice of Programming (1999)  
+  _Brian W. Kernighan, Rob Pike_
 
 ## Documentation
 
