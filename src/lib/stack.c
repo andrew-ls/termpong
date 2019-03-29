@@ -76,14 +76,11 @@ struct stack *stack_pop (struct stack *node)
 struct stack *stack_push (struct stack *next, void *body)
 {
 	struct stack *newnode = malloc(sizeof(*newnode));
-	if (newnode == NULL) {
-		return NULL;
-	}
-	else {
+	if (newnode) {
 		newnode->next = next;
 		newnode->body = body;
-		return newnode;
 	}
+	return newnode;
 }
 
 /*
