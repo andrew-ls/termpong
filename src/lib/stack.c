@@ -43,13 +43,11 @@
  */
 
 #include <stddef.h>
-#include <stdio.h>
 #include <stdlib.h>
 
 struct stack;
 struct stack *stack_pop (struct stack *);
 struct stack *stack_push (struct stack *, void *);
-void stack_test (void);
 
 /*
  * Metadata for a stack node.
@@ -81,28 +79,4 @@ struct stack *stack_push (struct stack *next, void *body)
 		newnode->body = body;
 	}
 	return newnode;
-}
-
-/*
- * Tests the implementation of the stack.
- *
- * Expected output:
- * 1
- * 3
- * 3
- * 7
- */
-void stack_test (void)
-{
-	int int_1 = 1;
-	int int_3 = 3;
-	int int_7 = 7;
-	struct stack *teststack;
-	teststack = stack_push(NULL, &int_7);
-	teststack = stack_push(teststack, &int_3);
-	teststack = stack_push(teststack, &int_3);
-	teststack = stack_push(teststack, &int_1);
-	for (; teststack != NULL; teststack = stack_pop(teststack) ) {
-		printf("%i\n", *((int *) (teststack->body)));
-	}
 }
