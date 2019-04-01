@@ -26,6 +26,15 @@
 #include <math.h>
 
 /*
+ * Converges an initial value towards a limit by a certain amount. The result
+ * will not exceed the bound of the limit in the direction of the convergence.
+ */
+#define APPROACH(initial, delta, limit) \
+	((initial) < (limit)) \
+		? FMIN(((initial) + (delta)), (limit)) \
+		: FMAX(((initial) - (delta)), (limit))
+
+/*
  * Returns the largest of two numbers.
  */
 #define FMAX(x, y) fmax((x), (y))
