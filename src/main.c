@@ -22,10 +22,10 @@
 
 #include <curses.h>
 #include <locale.h>
-#include <math.h>
 #include <stdbool.h>
 #include <stdlib.h>
 #include "gfx/char.h"
+#include "lib/math.h"
 #include "mgr/input.h"
 #include "mgr/time.h"
 
@@ -154,20 +154,20 @@ int main (void)
 		 */
 		werase(field);
 		char_drawrect(field,
-			round(paddle_l_coord_y),
-			round(paddle_l_coord_x),
+			ROUND(paddle_l_coord_y),
+			ROUND(paddle_l_coord_x),
 			PADDLE_HEIGHT,
 			PADDLE_WIDTH
 		);
 		char_drawrect(field,
-			round(paddle_r_coord_y),
-			round(paddle_r_coord_x),
+			ROUND(paddle_r_coord_y),
+			ROUND(paddle_r_coord_x),
 			PADDLE_HEIGHT,
 			PADDLE_WIDTH
 		);
 		char_drawrect(field,
-			round(ball_coord_y),
-			round(ball_coord_x),
+			ROUND(ball_coord_y),
+			ROUND(ball_coord_x),
 			BALL_HEIGHT,
 			BALL_WIDTH
 		);
