@@ -35,7 +35,9 @@ int main (void)
 	#define BALL_WIDTH 1
 	#define FIELD_WIDTH 80
 	#define FIELD_HEIGHT 50
+	#define PADDLE_FRICTION 40.0
 	#define PADDLE_HEIGHT 8
+	#define PADDLE_MOVESPEED 40.0
 	#define PADDLE_WIDTH 1
 
 	double ball_coord_x = (FIELD_WIDTH / 2.0) - (BALL_WIDTH / 2.0);
@@ -46,9 +48,11 @@ int main (void)
 
 	double paddle_l_coord_x = 8.0;
 	double paddle_l_coord_y = (FIELD_HEIGHT / 2.0) - (PADDLE_HEIGHT / 2.0);
+	double paddle_l_speed_y = 0.0;
 
 	double paddle_r_coord_x = FIELD_WIDTH - PADDLE_WIDTH - 8.0;
 	double paddle_r_coord_y = (FIELD_HEIGHT / 2.0) - (PADDLE_HEIGHT / 2.0);
+	double paddle_r_speed_y = 0.0;
 
 	int score_1 = 0;
 	int score_2 = 0;
@@ -89,6 +93,37 @@ int main (void)
 		 * The first game tick will have a time delta of 0.
 		 */
 		time_tick();
+
+		/*
+		 * Apply a speed to the right paddle with arrow key input.
+		 */
+		{
+			bool input_down = input_find(KEY_DOWN);
+			bool input_up = input_find(KEY_UP);
+			if (input_down && !input_up) {
+				paddle_r_speed_y = PADDLE_MOVESPEED;
+			}
+			else if (input_up && !input_down) {
+				paddle_r_speed_y = -PADDLE_MOVESPEED;
+			}
+		}
+
+		/*
+		 * Move paddles, scaled by the time delta for this game tick.
+		 * Additionally apply a frictional force to slow the paddle down.
+		 */
+		paddle_l_coord_y += paddle_l_speed_y * time_delta();
+		paddle_r_coord_y += paddle_r_speed_y * time_delta();
+		paddle_l_speed_y = APPROACH(
+			paddle_l_speed_y,
+			PADDLE_FRICTION * time_delta(),
+			0.0
+		);
+		paddle_r_speed_y = APPROACH(
+			paddle_r_speed_y,
+			PADDLE_FRICTION * time_delta(),
+			0.0
+		);
 
 		/*
 		 * Move ball, scaled by the time delta for this game tick.
