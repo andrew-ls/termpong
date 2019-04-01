@@ -28,6 +28,7 @@ command c99 \
 	-l 'm' \
 	-l 'rt' \
 	-I "${ROOT}/src" \
+	"${@}" \
 	"${ROOT}/src/main.c" \
 	"${ROOT}/src/gfx/char.c" \
 	"${ROOT}/src/lib/stack.c" \
