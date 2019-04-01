@@ -23,4 +23,5 @@
 ROOT="$(cd "$(dirname "${0}")"; pwd)/.."
 
 "${ROOT}/build/build" \
+	"${@}" \
 && "${ROOT}/bin/termpong"
