@@ -24,7 +24,9 @@
 #include <locale.h>
 #include <math.h>
 #include <stdbool.h>
+#include <stdlib.h>
 #include "gfx/char.h"
+#include "mgr/input.h"
 #include "mgr/time.h"
 
 int main (void)
@@ -58,6 +60,10 @@ int main (void)
 	initscr();
 	noecho();
 	curs_set(0);
+	cbreak(); /* Sets input mode to be raw with signals (e.g. SIGINT) */
+	nodelay(stdscr, true); /* Makes `getch` non-blocking */
+	keypad(stdscr, true); /* Enables keypad translation */
+	meta(stdscr, true); /* Force 8 bits for input */
 
 	/*
 	 * Create window to represent playing field.
@@ -68,6 +74,16 @@ int main (void)
 	 * Loop game ticks until SIGINT, then terminate curses.
 	 */
 	while (1) {
+		/*
+		 * Poll current input state.
+		 */
+		input_clear();
+		input_poll();
+		if (input_find(KEY_F(1))) {
+			endwin();
+			exit(0);
+		}
+
 		/*
 		 * Perform a game tick.
 		 * The first game tick will have a time delta of 0.
