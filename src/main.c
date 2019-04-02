@@ -28,74 +28,15 @@
 #include "lib/math.h"
 #include "mgr/input.h"
 #include "mgr/time.h"
+#include "obj/kind/Ball.h"
+#include "obj/kind/Paddle.h"
 
-#define BALL_HEIGHT 1
-#define BALL_WIDTH 1
 #define FIELD_WIDTH 80
 #define FIELD_HEIGHT 50
-#define PADDLE_FRICTION 40.0
-#define PADDLE_HEIGHT 8
-#define PADDLE_MOVESPEED 40.0
-#define PADDLE_WIDTH 1
-
-/*
- * Ball abstraction.
-*/
-struct ball {
-	struct {
-		double x;
-		double y;
-	} coord;
-	struct {
-		bool passed_paddle;
-	} props;
-	struct {
-		double x;
-		double y;
-	} speed;
-};
-struct ball *ball_new (void)
-{
-	struct ball *this = malloc(sizeof(struct ball));
-	this->coord.x = (FIELD_WIDTH / 2.0) - (BALL_WIDTH / 2.0);
-	this->coord.y = (FIELD_HEIGHT / 2.0) - (BALL_HEIGHT / 2.0);
-	this->props.passed_paddle = false;
-	this->speed.x = -20.0;
-	this->speed.y = 0.0;
-	return this;
-}
-
-/*
- * Paddle abstraction.
-*/
-enum {
-	PADDLE_LEFT = false,
-	PADDLE_RIGHT = true
-};
-struct paddle {
-	struct {
-		double x;
-		double y;
-	} coord;
-	struct {
-		double x;
-		double y;
-	} speed;
-};
-struct paddle *paddle_new (bool kind)
-{
-	struct paddle *this = malloc(sizeof(struct paddle));
-	this->coord.x = (kind == PADDLE_LEFT)
-		? 8.0
-		: FIELD_WIDTH - PADDLE_WIDTH - 8.0;
-	this->coord.y = (FIELD_HEIGHT / 2.0) - (PADDLE_HEIGHT / 2.0);
-	this->speed.x = 0.0;
-	this->speed.y = 0.0;
-	return this;
-}
 
 int main (void)
 {
+	bool ball_passed_paddle = false; /* Used for collision detection */
 	int score_1 = 0;
 	int score_2 = 0;
 
@@ -119,9 +60,19 @@ int main (void)
 	/*
 	 * Create paddles and ball.
 	 */
-	struct ball *ball = ball_new();
-	struct paddle *paddle_l = paddle_new(PADDLE_LEFT);
-	struct paddle *paddle_r = paddle_new(PADDLE_RIGHT);
+	Ball *ball = Ball__new();
+	Paddle *paddle_l = Paddle__new();
+	Paddle *paddle_r = Paddle__new();
+	Ball_translocate(ball,
+		(FIELD_WIDTH / 2.0) - (Ball_getWidth(ball) / 2.0),
+		(FIELD_HEIGHT / 2.0) - (Ball_getHeight(ball) / 2.0));
+	Ball_accelerate(ball, -20.0, 0.0);
+	Paddle_translocate(paddle_l,
+		8.0,
+		(FIELD_HEIGHT / 2.0) - (Paddle_getHeight(paddle_l) / 2.0));
+	Paddle_translocate(paddle_r,
+		FIELD_WIDTH - Paddle_getWidth(paddle_r) - 8.0,
+		(FIELD_HEIGHT / 2.0) - (Paddle_getHeight(paddle_l) / 2.0));
 
 	/*
 	 * Loop game ticks until SIGINT, then terminate curses.
@@ -150,10 +101,10 @@ int main (void)
 			bool input_down = input_find(KEY_DOWN);
 			bool input_up = input_find(KEY_UP);
 			if (input_down && !input_up) {
-				paddle_r->speed.y = PADDLE_MOVESPEED;
+				Paddle_move(paddle_r, PADDLE_DIR_DOWN);
 			}
 			else if (input_up && !input_down) {
-				paddle_r->speed.y = -PADDLE_MOVESPEED;
+				Paddle_move(paddle_r, PADDLE_DIR_UP);
 			}
 		}
 
@@ -161,68 +112,74 @@ int main (void)
 		 * Move paddles, scaled by the time delta for this game tick.
 		 * Additionally apply a frictional force to slow the paddle down.
 		 */
-		paddle_l->coord.y += paddle_l->speed.y * time_delta();
-		paddle_r->coord.y += paddle_r->speed.y * time_delta();
-		paddle_l->speed.y =
-			APPROACH(paddle_l->speed.y, PADDLE_FRICTION * time_delta(), 0.0);
-		paddle_r->speed.y =
-			APPROACH(paddle_r->speed.y, PADDLE_FRICTION * time_delta(), 0.0);
+		Paddle_translate(paddle_l, time_delta());
+		Paddle_translate(paddle_r, time_delta());
+		Paddle_applyFriction(paddle_l, PADDLE_FRICTION, time_delta());
+		Paddle_applyFriction(paddle_r, PADDLE_FRICTION, time_delta());
 
 		/*
 		 * Move ball, scaled by the time delta for this game tick.
 		 */
-		ball->coord.x += ball->speed.x * time_delta();
-		ball->coord.y += ball->speed.y * time_delta();
+		Ball_translate(ball, time_delta());
 
 		/*
 		 * Bounce the ball off the walls.
+		 * The ball's movement beyond the field is added to the rebound.
 		 */
-		if (ball->coord.y < 0) {
-			/*
-			 * The ball's movement beyond the field is added to the rebound.
-			 */
-			ball->coord.y = 0 - ball->coord.y;
-			ball->speed.y *= -1;
+		if (Ball_getY(ball) < 0.0) {
+			Ball_translocate(ball, Ball_getX(ball), 0 - Ball_getY(ball));
+			Ball_propel(ball, Ball_getXSpeed(ball), -Ball_getYSpeed(ball));
 		}
-		else if (ball->coord.y + BALL_HEIGHT > FIELD_HEIGHT) {
-			ball->coord.y = (FIELD_HEIGHT * 2) - ball->coord.y - BALL_HEIGHT;
-			ball->speed.y *= -1;
+		else if (Ball_getY(ball) + Ball_getHeight(ball) > FIELD_HEIGHT) {
+			Ball_translocate(ball,
+				Ball_getX(ball),
+				(FIELD_HEIGHT * 2) - Ball_getY(ball) - Ball_getHeight(ball));
+			Ball_propel(ball, Ball_getXSpeed(ball), -Ball_getYSpeed(ball));
 		}
 
 		/*
 		 * Bounce the ball off the paddles.
+		 * The ball's movement beyond the paddle is added to the rebound.
 		 */
-		if (! ball->props.passed_paddle) {
-			if (ball->coord.x < paddle_l->coord.x + PADDLE_WIDTH) {
+		if (!ball_passed_paddle) {
+			if (Ball_getX(ball)
+				< Paddle_getX(paddle_l) + Paddle_getWidth(paddle_l)
+			) {
 				if (
-					ball->coord.y > paddle_l->coord.y
-					&& ball->coord.y + BALL_HEIGHT
-						< paddle_l->coord.y + PADDLE_HEIGHT
+					Ball_getY(ball) > Paddle_getY(paddle_l)
+					&& Ball_getY(ball) + Ball_getHeight(ball)
+						< Paddle_getY(paddle_l) + Paddle_getHeight(paddle_l)
 				) {
-					/*
-					 * The ball's movement beyond the paddle is added to the
-					 * rebound.
-					 */
-					ball->coord.x = (paddle_l->coord.x + PADDLE_WIDTH) * 2
-						- ball->coord.x;
-					ball->speed.x *= -1;
+					Ball_translocate(ball,
+						(Paddle_getX(paddle_l) + Paddle_getWidth(paddle_l)) * 2
+							- Ball_getX(ball),
+						Ball_getY(ball));
+					Ball_propel(ball,
+						-Ball_getXSpeed(ball),
+						Ball_getYSpeed(ball));
 				}
 				else {
-					ball->props.passed_paddle = true;
+					ball_passed_paddle = true;
 				}
 			}
-			else if (ball->coord.x + BALL_WIDTH > paddle_r->coord.x) {
+			else if (Ball_getX(ball) + Ball_getWidth(ball)
+				> Paddle_getX(paddle_r)
+			) {
 				if (
-					ball->coord.y > paddle_r->coord.y
-					&& ball->coord.y + BALL_HEIGHT
-						< paddle_r->coord.y + PADDLE_HEIGHT
+					Ball_getY(ball) > Paddle_getY(paddle_r)
+					&& Ball_getY(ball) + Ball_getHeight(ball)
+						< Paddle_getY(paddle_r) + Paddle_getHeight(paddle_r)
 				) {
-					ball->coord.x = (paddle_r->coord.x - BALL_WIDTH) * 2
-						- ball->coord.x;
-					ball->speed.x *= -1;
+					Ball_translocate(ball,
+						(Paddle_getX(paddle_r) - Ball_getWidth(ball)) * 2
+							- Ball_getX(ball),
+						Ball_getY(ball));
+					Ball_propel(ball,
+						-Ball_getXSpeed(ball),
+						Ball_getYSpeed(ball));
 				}
 				else {
-					ball->props.passed_paddle = true;
+					ball_passed_paddle = true;
 				}
 			}
 		}
@@ -232,22 +189,22 @@ int main (void)
 		 */
 		werase(field);
 		char_drawrect(field,
-			ROUND(paddle_l->coord.y),
-			ROUND(paddle_l->coord.x),
-			PADDLE_HEIGHT,
-			PADDLE_WIDTH
+			ROUND(Paddle_getY(paddle_l)),
+			ROUND(Paddle_getX(paddle_l)),
+			(int) Paddle_getHeight(paddle_l),
+			(int) Paddle_getWidth(paddle_l)
 		);
 		char_drawrect(field,
-			ROUND(paddle_r->coord.y),
-			ROUND(paddle_r->coord.x),
-			PADDLE_HEIGHT,
-			PADDLE_WIDTH
+			ROUND(Paddle_getY(paddle_r)),
+			ROUND(Paddle_getX(paddle_r)),
+			(int) Paddle_getHeight(paddle_r),
+			(int) Paddle_getWidth(paddle_r)
 		);
 		char_drawrect(field,
-			ROUND(ball->coord.y),
-			ROUND(ball->coord.x),
-			BALL_HEIGHT,
-			BALL_WIDTH
+			ROUND(Ball_getY(ball)),
+			ROUND(Ball_getX(ball)),
+			(int) Ball_getHeight(ball),
+			(int) Ball_getWidth(ball)
 		);
 		wrefresh(field);
 	}
