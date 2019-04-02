@@ -28,18 +28,17 @@
 
 #include <time.h>
 
+#include "./time.h"
+struct timespec currtime;
+double dt;
+struct timespec timespec_compare (struct timespec *, struct timespec *);
+
 #define NANOSECOND_AS_SECOND 1.0 / 1000000000
 #define NANOSECONDS_INA_SECOND 1000000000
 
-struct timespec currtime;
-double dt;
-double time_delta (void);
-void time_tick (void);
-struct timespec timespec_compare (struct timespec *, struct timespec *);
-
 /*
  * Stores the current time, as of the last tick.
-*/
+ */
 struct timespec currtime = {
 	.tv_sec = 0,
 	.tv_nsec = 0,
