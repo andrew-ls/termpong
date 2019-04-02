@@ -20,36 +20,11 @@
  * along with this file. If not, see <https://www.gnu.org/licenses/>.
  */
 
-/*
- * This is a very simple implementation of a stack with no internal maintenance:
- * the consumer must track the current head node of the stack and always has
- * access to its body until popped, whereupon it receives the next node
- * (unlike other implementations where the consumer tracks the stack itself,
- * only receiving the head node's body when popped from the stack).
- *
- * Below is a visual representation of a stack containing 3 nodes;
- * lines with an arrow head represent pointers:
- *
- *   HEAD                  TAIL
- * ┌──────┐   ┌──────┐   ┌──────┐
- * │ next ────> next ────> next ────> NULL
- * ├──────┤   ├──────┤   ├──────┤
- * │ body ──┐ │ body ──┐ │ body ──┐
- * └──────┘ │ └──────┘ │ └──────┘ │
- *          │          │          │
- * ┌──────┐ │ ┌──────┐ │ ┌──────┐ │
- * │ ???? <─┘ │ ???? <─┘ │ ???? <─┘
- * └──────┘   └──────┘   └──────┘
- */
-
 #include <stddef.h>
 #include <stdlib.h>
 
 #include "./stack.h"
 
-/*
- * Removes a node from memory, returning the next node (or NULL).
- */
 struct stack *stack_pop (struct stack *node)
 {
 	struct stack *nextnode = node->next;
@@ -57,10 +32,6 @@ struct stack *stack_pop (struct stack *node)
 	return nextnode;
 }
 
-/*
- * Creates and returns a new stack node in memory, which is the new head node.
- * Use NULL for `next` if this is a new stack.
- */
 struct stack *stack_push (struct stack *next, void *body)
 {
 	struct stack *newnode = malloc(sizeof(*newnode));

@@ -49,17 +49,11 @@ struct timespec currtime = {
  */
 double dt = 0.0;
 
-/*
- * Returns the time delta (in seconds) since the last tick.
- */
 double time_delta (void)
 {
 	return dt;
 }
 
-/*
- * Executes a tick, calculating the time delta since the last tick.
- */
 void time_tick (void)
 {
 	/*

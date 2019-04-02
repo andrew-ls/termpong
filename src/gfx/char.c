@@ -30,10 +30,6 @@
 
 #include "./char.h"
 
-/*
- * Draws a rectangle to a curses window, using half-height characters to double
- * the vertical resolution.
- */
 void char_drawrect (
 	WINDOW *window,
 	int rect_y,

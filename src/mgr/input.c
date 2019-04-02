@@ -29,9 +29,6 @@
 #include "./input.h"
 struct stack *input_state;
 
-/*
- * Clears the current input state.
- */
 void input_clear (void)
 {
 	while (input_state) {
@@ -40,9 +37,6 @@ void input_clear (void)
 	}
 }
 
-/*
- * Returns whether an input is found in the current input state.
- */
 bool input_find (int input)
 {
 	struct stack *node = input_state;
@@ -57,9 +51,6 @@ bool input_find (int input)
 	return false;
 }
 
-/*
- * Polls the current input state.
- */
 void input_poll (void)
 {
 	int ch;
