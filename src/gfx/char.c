@@ -28,7 +28,7 @@
 #include <curses.h>
 #include <stddef.h>
 
-void char_drawrect (WINDOW *, int, int, int, int);
+#include "./char.h"
 
 /*
  * Draws a rectangle to a curses window, using half-height characters to double

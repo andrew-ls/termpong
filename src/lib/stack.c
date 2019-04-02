@@ -45,17 +45,7 @@
 #include <stddef.h>
 #include <stdlib.h>
 
-struct stack;
-struct stack *stack_pop (struct stack *);
-struct stack *stack_push (struct stack *, void *);
-
-/*
- * Metadata for a stack node.
- */
-struct stack {
-	struct stack *next;
-	void *body;
-};
+#include "./stack.h"
 
 /*
  * Removes a node from memory, returning the next node (or NULL).

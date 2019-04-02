@@ -26,9 +26,7 @@
 #include <stdlib.h>
 #include "lib/stack.h"
 
-void input_clear (void);
-bool input_find (int);
-void input_poll (void);
+#include "./input.h"
 struct stack *input_state;
 
 /*

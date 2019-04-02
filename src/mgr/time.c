@@ -28,14 +28,13 @@
 
 #include <time.h>
 
-#define NANOSECOND_AS_SECOND 1.0 / 1000000000
-#define NANOSECONDS_INA_SECOND 1000000000
-
+#include "./time.h"
 struct timespec currtime;
 double dt;
-double time_delta (void);
-void time_tick (void);
 struct timespec timespec_compare (struct timespec *, struct timespec *);
+
+#define NANOSECOND_AS_SECOND 1.0 / 1000000000
+#define NANOSECONDS_INA_SECOND 1000000000
 
 /*
  * Stores the current time, as of the last tick.
