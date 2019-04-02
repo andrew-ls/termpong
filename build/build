@@ -34,4 +34,9 @@ command c99 \
 	"${ROOT}/src/lib/stack.c" \
 	"${ROOT}/src/mgr/input.c" \
 	"${ROOT}/src/mgr/time.c" \
+	"${ROOT}/src/obj/ifix/Coord.c" \
+	"${ROOT}/src/obj/ifix/Size.c" \
+	"${ROOT}/src/obj/ifix/Speed.c" \
+	"${ROOT}/src/obj/kind/Ball.c" \
+	"${ROOT}/src/obj/kind/Paddle.c" \
 	;
