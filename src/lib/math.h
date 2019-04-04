@@ -35,6 +35,11 @@
 		: FMAX(((initial) - (delta)), (limit))
 
 /*
+ * Returns the absolute value.
+ */
+#define FABS(value) fabs(value)
+
+/*
  * Returns the largest of two numbers.
  */
 #define FMAX(x, y) fmax((x), (y))
