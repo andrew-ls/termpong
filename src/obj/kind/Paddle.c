@@ -79,10 +79,15 @@ void Paddle_applyFriction (Paddle *this, double friction, double mult)
 
 void Paddle_move (Paddle *this, int direction)
 {
+	double accel = PADDLE_MOVESPEED;
+	double currspeed = Paddle_getYSpeed(this);
+	if (FABS(currspeed) > PADDLE_MAXSPEED - PADDLE_REVERSAL_THRESHOLD) {
+		accel = FABS(currspeed);
+	}
 	if (direction < 0) {
-		Paddle_propel(this, 0.0, -PADDLE_MOVESPEED);
+		Paddle_propel(this, 0.0, APPROACH(currspeed, accel, -PADDLE_MAXSPEED));
 	}
 	else {
-		Paddle_propel(this, 0.0, PADDLE_MOVESPEED);
+		Paddle_propel(this, 0.0, APPROACH(currspeed, accel, PADDLE_MAXSPEED));
 	}
 }
