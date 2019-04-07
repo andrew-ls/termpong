@@ -31,6 +31,7 @@
 
 struct Paddle {
 	Coord *coord;
+	double momentum;
 	Size *size;
 	Speed *speed;
 };
@@ -72,9 +73,25 @@ void Paddle_translate (Paddle *this, double mult) { Speed_translate(this->speed,
 
 void Paddle_applyFriction (Paddle *this, double friction, double mult)
 {
-	Paddle_propel(this,
-		0.0,
-		APPROACH(Paddle_getYSpeed(this), friction * mult, 0.0));
+	double force = friction * mult;
+	if (this->momentum > 0.0) {
+		this->momentum -= force;
+		if (this->momentum < 0.0) {
+			force = FABS(this->momentum);
+			this->momentum = 0.0;
+		}
+		else {
+			force = 0.0;
+		}
+		if (this->momentum > PADDLE_MOMENTUM_MAX) {
+			this->momentum = PADDLE_MOMENTUM_MAX;
+		}
+	}
+	if (force > 0.0) {
+		Paddle_propel(this,
+			0.0,
+			APPROACH(Paddle_getYSpeed(this), force, 0.0));
+	}
 }
 
 void Paddle_move (Paddle *this, int direction)
@@ -84,12 +101,18 @@ void Paddle_move (Paddle *this, int direction)
 	double currspeed_abs = FABS(currspeed);
 	direction = SGN(direction);
 	if ((currspeed > 0.0) == (direction > 0.0)) {
+		this->momentum += PADDLE_MOMENTUM_BASIC;
 		if (currspeed_abs > PADDLE_MOVE_THRESHOLD_BOOST) {
 			accel += PADDLE_MOVE_BOOST;
+			this->momentum += PADDLE_MOMENTUM_BOOST;
+		}
+		if (this->momentum > PADDLE_MOMENTUM_MAX) {
+			this->momentum = PADDLE_MOMENTUM_MAX;
 		}
 	}
 	else if (currspeed_abs > PADDLE_MOVE_THRESHOLD_REVERSAL) {
 		accel = currspeed_abs;
+		this->momentum = 0.0;
 	}
 	Paddle_propel(this, 0.0,
 		APPROACH(currspeed, accel, PADDLE_MOVE_MAX * direction));
