@@ -20,6 +20,7 @@
  * along with this file. If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <stddef.h>
 #include <stdlib.h>
 
 #include "../../lib/math.h"
@@ -35,13 +36,13 @@ struct Paddle {
 	Size *size;
 	Speed *speed;
 };
-void Paddle__delete (Paddle *this)
+Paddle *Paddle__delete (Paddle *this)
 {
 	Coord__delete(this->coord);
 	Size__delete(this->size);
 	Speed__delete(this->speed);
 	free(this);
-	return;
+	return NULL;
 }
 Paddle *Paddle__new (void)
 {

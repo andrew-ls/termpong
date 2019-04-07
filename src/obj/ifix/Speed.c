@@ -20,6 +20,7 @@
  * along with this file. If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <stddef.h>
 #include <stdlib.h>
 
 #include "./Speed.h"
@@ -28,10 +29,10 @@ struct Speed {
 	double x;
 	double y;
 };
-void Speed__delete (Speed *this)
+Speed *Speed__delete (Speed *this)
 {
 	free(this);
-	return;
+	return NULL;
 }
 Speed *Speed__new (void)
 {

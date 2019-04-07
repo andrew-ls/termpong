@@ -38,7 +38,7 @@
 #define PADDLE_SIZE_WIDTH 1.0
 
 typedef struct Paddle Paddle;
-void Paddle__delete (Paddle *this);
+Paddle *Paddle__delete (Paddle *this);
 Paddle *Paddle__new (void);
 
 /* Interface: Coord */

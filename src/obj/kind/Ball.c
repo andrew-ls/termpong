@@ -20,6 +20,7 @@
  * along with this file. If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <stddef.h>
 #include <stdlib.h>
 
 #include "../ifix/Coord.h"
@@ -33,13 +34,13 @@ struct Ball {
 	Size *size;
 	Speed *speed;
 };
-void Ball__delete (Ball *this)
+Ball *Ball__delete (Ball *this)
 {
 	Coord__delete(this->coord);
 	Size__delete(this->size);
 	Speed__delete(this->speed);
 	free(this);
-	return;
+	return NULL;
 }
 Ball *Ball__new (void)
 {

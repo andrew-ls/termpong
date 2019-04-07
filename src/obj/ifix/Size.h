@@ -24,7 +24,7 @@
 #define INCLUDE_OBJ_IFIX_SIZE_H
 
 typedef struct Size Size;
-void Size__delete (Size *this);
+Size *Size__delete (Size *this);
 Size *Size__new (void);
 
 /*

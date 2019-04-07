@@ -27,7 +27,7 @@
 #define BALL_SIZE_WIDTH 1.0
 
 typedef struct Ball Ball;
-void Ball__delete (Ball *this);
+Ball *Ball__delete (Ball *this);
 Ball *Ball__new (void);
 
 /* Interface: Coord */

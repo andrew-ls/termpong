@@ -20,6 +20,7 @@
  * along with this file. If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <stddef.h>
 #include <stdlib.h>
 
 #include "./Size.h"
@@ -28,10 +29,10 @@ struct Size {
 	double height;
 	double width;
 };
-void Size__delete (Size *this)
+Size *Size__delete (Size *this)
 {
 	free(this);
-	return;
+	return NULL;
 }
 Size *Size__new (void)
 {

@@ -20,6 +20,7 @@
  * along with this file. If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <stddef.h>
 #include <stdlib.h>
 
 #include "./Coord.h"
@@ -28,10 +29,10 @@ struct Coord {
 	double x;
 	double y;
 };
-void Coord__delete (Coord *this)
+Coord *Coord__delete (Coord *this)
 {
 	free(this);
-	return;
+	return NULL;
 }
 Coord *Coord__new (void)
 {
