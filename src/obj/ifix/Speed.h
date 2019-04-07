@@ -24,7 +24,7 @@
 #define INCLUDE_OBJ_IFIX_SPEED_H
 
 typedef struct Speed Speed;
-void Speed__delete (Speed *this);
+Speed *Speed__delete (Speed *this);
 Speed *Speed__new (void);
 
 /*

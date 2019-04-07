@@ -24,7 +24,7 @@
 #define INCLUDE_OBJ_IFIX_COORD_H
 
 typedef struct Coord Coord;
-void Coord__delete (Coord *this);
+Coord *Coord__delete (Coord *this);
 Coord *Coord__new (void);
 
 /*
