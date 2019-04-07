@@ -20,6 +20,7 @@
  * along with this file. If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <stdbool.h>
 #include <stddef.h>
 #include <stdlib.h>
 
@@ -73,7 +74,35 @@ void Paddle_accelerate (Paddle *this, double x, double y) { Speed_accelerate(thi
 double Paddle_getXSpeed (Paddle *this) { return Speed_getXSpeed(this->speed); }
 double Paddle_getYSpeed (Paddle *this) { return Speed_getYSpeed(this->speed); }
 void Paddle_propel (Paddle *this, double x, double y) { Speed_propel(this->speed, x, y); }
-void Paddle_translate (Paddle *this, double mult) { Speed_translate(this->speed, mult, this, Paddle_shift); }
+void Paddle_translate (Paddle *this, double mult) {
+	Speed_translate(this->speed, mult, this, Paddle_shift);
+
+	/*
+	 * Confine paddles to the bounds of their field.
+	 */
+	{
+		bool blocked = false;
+		double y = Paddle_getY(this);
+		if (y < PADDLE_MARGIN) {
+			Paddle_translocate(this, Paddle_getX(this), PADDLE_MARGIN);
+			blocked = true;
+		}
+		else if (
+			y + Paddle_getHeight(this)
+				> Field_getHeight(this->field) - PADDLE_MARGIN
+		) {
+			Paddle_translocate(this,
+				Paddle_getX(this),
+				Field_getHeight(this->field) - PADDLE_MARGIN
+					- Paddle_getHeight(this));
+			blocked = true;
+		}
+		if (blocked) {
+			Paddle_propel(this, 0.0, 0.0);
+			this->momentum = 0.0;
+		}
+	}
+}
 
 void Paddle_applyFriction (Paddle *this, double friction, double mult)
 {
