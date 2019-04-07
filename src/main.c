@@ -29,10 +29,8 @@
 #include "mgr/input.h"
 #include "mgr/time.h"
 #include "obj/kind/Ball.h"
+#include "obj/kind/Field.h"
 #include "obj/kind/Paddle.h"
-
-#define FIELD_WIDTH 80
-#define FIELD_HEIGHT 50
 
 void game_draw (void);
 void game_exit (int status);
@@ -42,7 +40,7 @@ void game_tick (void);
 
 Ball *ball;
 bool collision_ball_passed_paddle;
-WINDOW *field;
+Field *field;
 Paddle *paddle_l;
 Paddle *paddle_r;
 int score_1 = 0;
@@ -50,26 +48,26 @@ int score_2 = 0;
 
 void game_draw (void)
 {
-	werase(field);
-	char_drawrect(field,
+	werase(Field_getWindow(field));
+	char_drawrect(Field_getWindow(field),
 		ROUND(Paddle_getY(paddle_l)),
 		ROUND(Paddle_getX(paddle_l)),
 		(int) Paddle_getHeight(paddle_l),
 		(int) Paddle_getWidth(paddle_l)
 	);
-	char_drawrect(field,
+	char_drawrect(Field_getWindow(field),
 		ROUND(Paddle_getY(paddle_r)),
 		ROUND(Paddle_getX(paddle_r)),
 		(int) Paddle_getHeight(paddle_r),
 		(int) Paddle_getWidth(paddle_r)
 	);
-	char_drawrect(field,
+	char_drawrect(Field_getWindow(field),
 		ROUND(Ball_getY(ball)),
 		ROUND(Ball_getX(ball)),
 		(int) Ball_getHeight(ball),
 		(int) Ball_getWidth(ball)
 	);
-	wrefresh(field);
+	wrefresh(Field_getWindow(field));
 }
 
 void game_exit (int status)
@@ -91,8 +89,8 @@ void game_init (void)
 	keypad(stdscr, true); /* Enables keypad translation */
 	meta(stdscr, true); /* Force 8 bits for input */
 
-	field = newwin(FIELD_HEIGHT, FIELD_WIDTH, 0, 0);
 	ball = Ball__new();
+	field = Field__new();
 	paddle_l = Paddle__new();
 	paddle_r = Paddle__new();
 	score_1 = 0;
@@ -105,15 +103,15 @@ void game_round_new (void)
 {
 	collision_ball_passed_paddle = false;
 	Ball_translocate(ball,
-		(FIELD_WIDTH / 2.0) - (Ball_getWidth(ball) / 2.0),
-		(FIELD_HEIGHT / 2.0) - (Ball_getHeight(ball) / 2.0));
+		(Field_getWidth(field) / 2.0) - (Ball_getWidth(ball) / 2.0),
+		(Field_getHeight(field) / 2.0) - (Ball_getHeight(ball) / 2.0));
 	Ball_accelerate(ball, -20.0, 0.0);
 	Paddle_translocate(paddle_l,
 		8.0,
-		(FIELD_HEIGHT / 2.0) - (Paddle_getHeight(paddle_l) / 2.0));
+		(Field_getHeight(field) / 2.0) - (Paddle_getHeight(paddle_l) / 2.0));
 	Paddle_translocate(paddle_r,
-		FIELD_WIDTH - Paddle_getWidth(paddle_r) - 8.0,
-		(FIELD_HEIGHT / 2.0) - (Paddle_getHeight(paddle_l) / 2.0));
+		Field_getWidth(field) - Paddle_getWidth(paddle_r) - 8.0,
+		(Field_getHeight(field) / 2.0) - (Paddle_getHeight(paddle_l) / 2.0));
 }
 
 void game_tick (void)
@@ -157,10 +155,11 @@ void game_tick (void)
 		Ball_translocate(ball, Ball_getX(ball), 0 - Ball_getY(ball));
 		Ball_propel(ball, Ball_getXSpeed(ball), -Ball_getYSpeed(ball));
 	}
-	else if (Ball_getY(ball) + Ball_getHeight(ball) > FIELD_HEIGHT) {
+	else if (Ball_getY(ball) + Ball_getHeight(ball) > Field_getHeight(field)) {
 		Ball_translocate(ball,
 			Ball_getX(ball),
-			(FIELD_HEIGHT * 2) - Ball_getY(ball) - Ball_getHeight(ball));
+			(Field_getHeight(field) * 2)
+				- Ball_getY(ball) - Ball_getHeight(ball));
 		Ball_propel(ball, Ball_getXSpeed(ball), -Ball_getYSpeed(ball));
 	}
 

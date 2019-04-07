@@ -38,5 +38,6 @@ command c99 \
 	"${ROOT}/src/obj/ifix/Size.c" \
 	"${ROOT}/src/obj/ifix/Speed.c" \
 	"${ROOT}/src/obj/kind/Ball.c" \
+	"${ROOT}/src/obj/kind/Field.c" \
 	"${ROOT}/src/obj/kind/Paddle.c" \
 	;
