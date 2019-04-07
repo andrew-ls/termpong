@@ -27,11 +27,13 @@
 #include "../ifix/Coord.h"
 #include "../ifix/Size.h"
 #include "../ifix/Speed.h"
+#include "obj/kind/Field.h"
 
 #include "./Paddle.h"
 
 struct Paddle {
 	Coord *coord;
+	Field *field;
 	double momentum;
 	Size *size;
 	Speed *speed;
@@ -44,10 +46,11 @@ Paddle *Paddle__delete (Paddle *this)
 	free(this);
 	return NULL;
 }
-Paddle *Paddle__new (void)
+Paddle *Paddle__new (Field *field)
 {
 	Paddle *this = malloc(sizeof(*this));
 	this->coord = Coord__new();
+	this->field = field;
 	this->size = Size__new();
 	this->speed = Speed__new();
 	Paddle_resize(this, PADDLE_SIZE_WIDTH, PADDLE_SIZE_HEIGHT);

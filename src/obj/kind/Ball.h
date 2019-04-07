@@ -23,12 +23,14 @@
 #ifndef INCLUDE_OBJ_KIND_BALL_H
 #define INCLUDE_OBJ_KIND_BALL_H
 
+#include "obj/kind/Field.h"
+
 #define BALL_SIZE_HEIGHT 1.0
 #define BALL_SIZE_WIDTH 1.0
 
 typedef struct Ball Ball;
 Ball *Ball__delete (Ball *this);
-Ball *Ball__new (void);
+Ball *Ball__new (Field *field);
 
 /* Interface: Coord */
 double Ball_getX (Ball *this);

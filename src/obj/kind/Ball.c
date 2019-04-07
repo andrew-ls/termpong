@@ -26,11 +26,13 @@
 #include "../ifix/Coord.h"
 #include "../ifix/Size.h"
 #include "../ifix/Speed.h"
+#include "obj/kind/Field.h"
 
 #include "./Ball.h"
 
 struct Ball {
 	Coord *coord;
+	Field *field;
 	Size *size;
 	Speed *speed;
 };
@@ -42,10 +44,11 @@ Ball *Ball__delete (Ball *this)
 	free(this);
 	return NULL;
 }
-Ball *Ball__new (void)
+Ball *Ball__new (Field *field)
 {
 	Ball *this = malloc(sizeof(*this));
 	this->coord = Coord__new();
+	this->field = field;
 	this->size = Size__new();
 	this->speed = Speed__new();
 	Ball_resize(this, BALL_SIZE_WIDTH, BALL_SIZE_HEIGHT);

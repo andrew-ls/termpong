@@ -23,6 +23,8 @@
 #ifndef INCLUDE_OBJ_KIND_PADDLE_H
 #define INCLUDE_OBJ_KIND_PADDLE_H
 
+#include "obj/kind/Field.h"
+
 #define PADDLE_DIR_DOWN 1
 #define PADDLE_DIR_UP -1
 #define PADDLE_FRICTION 30.0
@@ -39,7 +41,7 @@
 
 typedef struct Paddle Paddle;
 Paddle *Paddle__delete (Paddle *this);
-Paddle *Paddle__new (void);
+Paddle *Paddle__new (Field *field);
 
 /* Interface: Coord */
 double Paddle_getX (Paddle *this);

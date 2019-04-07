@@ -89,10 +89,10 @@ void game_init (void)
 	keypad(stdscr, true); /* Enables keypad translation */
 	meta(stdscr, true); /* Force 8 bits for input */
 
-	ball = Ball__new();
 	field = Field__new();
-	paddle_l = Paddle__new();
-	paddle_r = Paddle__new();
+	ball = Ball__new(field);
+	paddle_l = Paddle__new(field);
+	paddle_r = Paddle__new(field);
 	score_1 = 0;
 	score_2 = 0;
 
