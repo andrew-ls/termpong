@@ -46,6 +46,11 @@
 #define FABS(value) fabs(value)
 
 /*
+ * Returns the greatest integer that is not greater than x.
+ */
+#define FLOOR(x) floor(x)
+
+/*
  * Returns the largest of two numbers.
  */
 #define FMAX(x, y) fmax((x), (y))
