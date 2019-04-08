@@ -12,6 +12,7 @@ development of this project.
 
 ## Documentation
 
+* [cppreference.com: C reference](https://en.cppreference.com/w/c)
 * [POSIX.1-2017 Specification](https://pubs.opengroup.org/onlinepubs/9699919799/) (2017)
 * [X/Open Curses, Issue 4 Version 2 Reference](https://pubs.opengroup.org/onlinepubs/007908799/cursesix.html) (1997)
   * [`curses.h`](https://pubs.opengroup.org/onlinepubs/007908799/xcurses/curses.h.html)
