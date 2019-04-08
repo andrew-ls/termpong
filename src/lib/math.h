@@ -24,6 +24,12 @@
 #define INCLUDE_LIB_MATH_H
 
 #include <math.h>
+#include <stdlib.h>
+
+/*
+ * Returns the absolute value of an integer.
+ */
+#define ABS(value) abs(value)
 
 /*
  * Converges an initial value towards a limit by a certain amount. The result
@@ -35,7 +41,7 @@
 		: FMAX(((initial) - (delta)), (limit))
 
 /*
- * Returns the absolute value.
+ * Returns the absolute value of a double.
  */
 #define FABS(value) fabs(value)
 
