@@ -37,4 +37,9 @@ void char_drawrect (
 	int rect_width
 );
 
+/*
+ * Draws a string to a curses window at the specified position.
+ */
+void char_drawstr (WINDOW *window, int pos_y, int pos_x, char *string);
+
 #endif

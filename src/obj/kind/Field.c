@@ -23,6 +23,7 @@
 #include <curses.h>
 #include <stddef.h>
 #include <stdlib.h>
+#include "gfx/char.h"
 #include "obj/ifix/Size.h"
 
 #include "./Field.h"
@@ -54,6 +55,19 @@ void Field_resize (Field *this, double width, double height) {
 	delwin(this->window);
 	this->window = newwin((int) height, (int) width, 0, 0);
 	Size_resize(this->size, width, height);
+}
+
+void Field_drawScore (Field *this, unsigned int score, int position)
+{
+	int len = snprintf(NULL, 0, "%u", score);
+	char *str = malloc(len + 1);
+	int pos_x = (position == FIELD_SCORE_POS_L)
+		? 2
+		: (int) Field_getWidth(this) - len - 2;
+	int pos_y = 1;
+	snprintf(str, len + 1, "%u", score);
+	char_drawstr(Field_getWindow(this), pos_y, pos_x, str);
+	free(str);
 }
 
 WINDOW *Field_getWindow (Field *this)

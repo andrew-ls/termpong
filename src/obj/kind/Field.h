@@ -28,6 +28,11 @@
 #define FIELD_SIZE_HEIGHT 50.0
 #define FIELD_SIZE_WIDTH 80.0
 
+enum {
+	FIELD_SCORE_POS_L,
+	FIELD_SCORE_POS_R,
+};
+
 typedef struct Field Field;
 Field *Field__delete (Field *this);
 Field *Field__new (void);
@@ -36,6 +41,12 @@ Field *Field__new (void);
 double Field_getHeight (Field *this);
 double Field_getWidth (Field *this);
 void Field_resize (Field *this, double width, double height);
+
+/*
+ * Draws a score to the field in one of two positions defined by
+ * `FIELD_SCORE_POS_*`.
+ */
+void Field_drawScore (Field *this, unsigned int score, int position);
 
 /*
  * Returns the curses window the field is representing.

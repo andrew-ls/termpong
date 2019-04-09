@@ -74,3 +74,8 @@ void char_drawrect (
 		}
 	}
 }
+
+void char_drawstr (WINDOW *window, int pos_y, int pos_x, char *string)
+{
+	mvwaddstr(window, pos_y, pos_x, string);
+}
