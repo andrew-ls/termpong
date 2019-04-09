@@ -43,12 +43,14 @@ bool collision_ball_passed_paddle;
 Field *field;
 Paddle *paddle_l;
 Paddle *paddle_r;
-int score_1 = 0;
-int score_2 = 0;
+unsigned int score_l = 0;
+unsigned int score_r = 0;
 
 void game_draw (void)
 {
 	werase(Field_getWindow(field));
+	Field_drawScore(field, score_l, FIELD_SCORE_POS_L);
+	Field_drawScore(field, score_r, FIELD_SCORE_POS_R);
 	char_drawrect(Field_getWindow(field),
 		ROUND(Paddle_getY(paddle_l)),
 		ROUND(Paddle_getX(paddle_l)),
@@ -93,8 +95,8 @@ void game_init (void)
 	ball = Ball__new(field);
 	paddle_l = Paddle__new(field);
 	paddle_r = Paddle__new(field);
-	score_1 = 0;
-	score_2 = 0;
+	score_l = 0;
+	score_r = 0;
 
 	game_round_new();
 }
