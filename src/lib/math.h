@@ -61,6 +61,11 @@
 #define FMIN(x, y) fmin((x), (y))
 
 /*
+ * Returns the common logarithm of a double.
+ */
+#define LG(x) log10(x)
+
+/*
  * Round up or down to the nearest integral number.
  */
 #define ROUND(x) round(x)
