@@ -107,7 +107,7 @@ void game_round_new (void)
 	Ball_translocate(ball,
 		(Field_getWidth(field) / 2.0) - (Ball_getWidth(ball) / 2.0),
 		(Field_getHeight(field) / 2.0) - (Ball_getHeight(ball) / 2.0));
-	Ball_accelerate(ball, -20.0, 0.0);
+	Ball_propel(ball, -20.0, 0.0);
 	Paddle_translocate(paddle_l,
 		8.0,
 		(Field_getHeight(field) / 2.0) - (Paddle_getHeight(paddle_l) / 2.0));
@@ -148,6 +148,20 @@ void game_tick (void)
 	Paddle_translate(paddle_r, time_delta());
 	Paddle_applyFriction(paddle_l, PADDLE_FRICTION, time_delta());
 	Paddle_applyFriction(paddle_r, PADDLE_FRICTION, time_delta());
+
+	/*
+	 * When the ball passes the field's left and right sides,
+	 */
+	if (Ball_getX(ball) < 0.0) {
+		score_r += 1;
+		game_round_new();
+		return;
+	}
+	else if (Ball_getX(ball) + Ball_getWidth(ball) > Field_getWidth(field)) {
+		score_l += 1;
+		game_round_new();
+		return;
+	}
 
 	/*
 	 * Bounce the ball off the walls.
