@@ -44,7 +44,12 @@ then
 		printf '%s\n' 'SUCCESS'
 		exit 0
 	else
-		printf '%s\n' 'FAILURE'
+		printf '%s\n' \
+			'FAILURE:' \
+			'  Expected:' \
+			"    $(printf '%s ' ${EXPECTED})" \
+			'  Received:' \
+			"    $(printf '%s ' ${OUTPUT})"
 		exit 1
 	fi
 else
