@@ -163,10 +163,12 @@ void game_tick (void)
 		return;
 	}
 
-	/*
-	 * Bounce the ball off the walls.
-	 * The ball's movement beyond the field is added to the rebound.
-	 */
+	/*_________________________________________________________________
+	 /                                                                 \
+	 |  Bounce the ball off the walls.                                 |
+	 |  The ball's movement beyond the field is added to the rebound.  |
+	 \__   ____________________________________________________________/
+	    \*/
 	if (Ball_getY(ball) < 0.0) {
 		Ball_translocate(ball, Ball_getX(ball), 0 - Ball_getY(ball));
 		Ball_propel(ball, Ball_getXSpeed(ball), -Ball_getYSpeed(ball));
