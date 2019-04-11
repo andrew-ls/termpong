@@ -32,6 +32,7 @@ command c99 \
 	"${ROOT}/src/main.c" \
 	"${ROOT}/src/gfx/char.c" \
 	"${ROOT}/src/lib/stack.c" \
+	"${ROOT}/src/lib/util.c" \
 	"${ROOT}/src/mgr/input.c" \
 	"${ROOT}/src/mgr/time.c" \
 	"${ROOT}/src/obj/ifix/Coord.c" \
