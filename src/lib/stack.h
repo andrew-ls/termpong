@@ -45,6 +45,8 @@
  * └──────┘   └──────┘   └──────┘
  */
 
+#include <stdbool.h>
+
 /*
  * Metadata for a stack node.
  */
@@ -52,6 +54,25 @@ struct stack {
 	struct stack *next;
 	void *body;
 };
+
+/*
+ * Returns whether a pointer matches any body pointer in the stack.
+ */
+bool stack_find (
+	struct stack *node,
+	void *pointer
+);
+
+/*
+ * Returns whether a value matches any dereferenced body in the stack.
+ * Requires a comparison function to be provided: this must take two pointers
+ * and return true if the dereferenced values of both arguments are equal.
+ */
+bool stack_findval (
+	struct stack *node,
+	void *value,
+	bool (*comparison)()
+);
 
 /*
  * Removes a node from memory, returning the next node (or NULL).

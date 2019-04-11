@@ -20,10 +20,34 @@
  * along with this file. If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <stdbool.h>
 #include <stddef.h>
 #include <stdlib.h>
 
 #include "./stack.h"
+
+bool stack_find (struct stack *node, void *pointer)
+{
+	while (node) {
+		if (node->body == pointer) {
+			return true;
+		}
+		else {
+			node = node->next;
+		}
+	}
+	return false;
+}
+
+bool stack_findval (
+	struct stack *node,
+	void *value,
+	bool (*comparison)())
+{
+	return node && (
+		comparison(node->body, value) ||
+		stack_findval(node->next, value, comparison));
+}
 
 struct stack *stack_pop (struct stack *node)
 {

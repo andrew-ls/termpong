@@ -27,4 +27,11 @@
  * Provides a variety of small utility functions.
  */
 
+#include <stdbool.h>
+
+/*
+ * Returns whether the dereferenced values of two integer pointers are equal.
+ */
+bool iequals (int *a, int *b);
+
 #endif

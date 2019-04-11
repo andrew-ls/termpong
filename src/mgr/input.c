@@ -25,6 +25,7 @@
 #include <stddef.h>
 #include <stdlib.h>
 #include "lib/stack.h"
+#include "lib/util.h"
 
 #include "./input.h"
 struct stack *input_state;
@@ -39,16 +40,7 @@ void input_clear (void)
 
 bool input_find (int input)
 {
-	struct stack *node = input_state;
-	while (node) {
-		if (*((int *) (node->body)) == input) {
-			return true;
-		}
-		else {
-			node = node->next;
-		}
-	}
-	return false;
+	return stack_findval(input_state, &input, iequals);
 }
 
 void input_poll (void)
