@@ -56,9 +56,28 @@ struct stack {
 };
 
 /*
+ * Returns the first node with a matching body pointer.
+ */
+struct stack *stack_find (
+	struct stack *node,
+	void *pointer
+);
+
+/*
+ * Returns the first node with a matching dereferenced body.
+ * Requires a comparison function to be provided: this must take two pointers
+ * and return true if the dereferenced values of both arguments are equal.
+ */
+struct stack *stack_findval (
+	struct stack *node,
+	void *value,
+	bool (*comparison)()
+);
+
+/*
  * Returns whether a pointer matches any body pointer in the stack.
  */
-bool stack_find (
+bool stack_exists (
 	struct stack *node,
 	void *pointer
 );
@@ -68,7 +87,7 @@ bool stack_find (
  * Requires a comparison function to be provided: this must take two pointers
  * and return true if the dereferenced values of both arguments are equal.
  */
-bool stack_findval (
+bool stack_existsval (
 	struct stack *node,
 	void *value,
 	bool (*comparison)()
