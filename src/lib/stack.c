@@ -26,27 +26,46 @@
 
 #include "./stack.h"
 
-bool stack_find (struct stack *node, void *pointer)
+struct stack *stack_find (struct stack *node, void *pointer)
 {
 	while (node) {
 		if (node->body == pointer) {
-			return true;
+			return node;
 		}
 		else {
 			node = node->next;
 		}
 	}
-	return false;
+	return NULL;
 }
 
-bool stack_findval (
+struct stack *stack_findval (
 	struct stack *node,
 	void *value,
 	bool (*comparison)())
 {
-	return node && (
-		comparison(node->body, value) ||
-		stack_findval(node->next, value, comparison));
+	while (node) {
+		if (comparison(node->body, value)) {
+			return node;
+		}
+		else {
+			node = node->next;
+		}
+	}
+	return NULL;
+}
+
+bool stack_exists (struct stack *node, void *pointer)
+{
+	return stack_find(node, pointer) != NULL;
+}
+
+bool stack_existsval (
+	struct stack *node,
+	void *value,
+	bool (*comparison)())
+{
+	return stack_findval(node, value, comparison) != NULL;
 }
 
 struct stack *stack_pop (struct stack *node)
