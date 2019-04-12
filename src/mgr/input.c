@@ -40,7 +40,7 @@ void input_clear (void)
 
 bool input_find (int input)
 {
-	return stack_existsval(input_state, &input, iequals);
+	return stack_findval(input_state, &input, iequals) != NULL;
 }
 
 void input_poll (void)

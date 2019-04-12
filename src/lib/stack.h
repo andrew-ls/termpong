@@ -75,25 +75,6 @@ struct stack *stack_findval (
 );
 
 /*
- * Returns whether a pointer matches any body pointer in the stack.
- */
-bool stack_exists (
-	struct stack *node,
-	void *pointer
-);
-
-/*
- * Returns whether a value matches any dereferenced body in the stack.
- * Requires a comparison function to be provided: this must take two pointers
- * and return true if the dereferenced values of both arguments are equal.
- */
-bool stack_existsval (
-	struct stack *node,
-	void *value,
-	bool (*comparison)()
-);
-
-/*
  * Removes a node from memory, returning the next node (or NULL).
  */
 struct stack *stack_pop (
