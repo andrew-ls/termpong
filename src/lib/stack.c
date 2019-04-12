@@ -55,19 +55,6 @@ struct stack *stack_findval (
 	return NULL;
 }
 
-bool stack_exists (struct stack *node, void *pointer)
-{
-	return stack_find(node, pointer) != NULL;
-}
-
-bool stack_existsval (
-	struct stack *node,
-	void *value,
-	bool (*comparison)())
-{
-	return stack_findval(node, value, comparison) != NULL;
-}
-
 struct stack *stack_pop (struct stack *node)
 {
 	struct stack *nextnode = node->next;
