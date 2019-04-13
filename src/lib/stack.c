@@ -30,15 +30,11 @@ bool stack_ishead (struct stack *);
 
 struct stack *stack_find (struct stack *node, void *pointer)
 {
-	while (node) {
-		if (node->body == pointer) {
-			return node;
-		}
-		else {
-			node = node->next;
-		}
-	}
-	return NULL;
+	return node
+		? node->body == pointer
+			? node
+			: stack_find(node->next, pointer)
+		: NULL;
 }
 
 struct stack *stack_findval (
@@ -46,15 +42,11 @@ struct stack *stack_findval (
 	void *value,
 	bool (*comparison)())
 {
-	while (node) {
-		if (comparison(node->body, value)) {
-			return node;
-		}
-		else {
-			node = node->next;
-		}
-	}
-	return NULL;
+	return node
+		? comparison(node->body, value)
+			? node
+			: stack_findval(node->next, value, comparison)
+		: NULL;
 }
 
 struct stack *stack_gethead (struct stack *node)
