@@ -22,8 +22,11 @@
 
 #include <stddef.h>
 #include <stdlib.h>
+#include "lib/stack.h"
 
 #include "./Coord.h"
+
+struct stack *Coords = NULL;
 
 struct Coord {
 	double x;
@@ -32,6 +35,7 @@ struct Coord {
 Coord *Coord__delete (Coord *this)
 {
 	free(this);
+	Coords = stack_pop(stack_find(Coords, this));
 	return NULL;
 }
 Coord *Coord__new (void)
@@ -42,6 +46,7 @@ Coord *Coord__new (void)
 			.x = 0.0,
 			.y = 0.0,
 		};
+		Coords = stack_push(Coords, this);
 	}
 	return this;
 }

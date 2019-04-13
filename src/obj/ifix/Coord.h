@@ -23,6 +23,12 @@
 #ifndef INCLUDE_OBJ_IFIX_COORD_H
 #define INCLUDE_OBJ_IFIX_COORD_H
 
+#include "lib/stack.h"
+
+/* Instances */
+struct stack *Coords;
+
+/* Base */
 typedef struct Coord Coord;
 Coord *Coord__delete (Coord *this);
 Coord *Coord__new (void);

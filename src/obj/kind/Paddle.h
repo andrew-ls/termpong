@@ -23,6 +23,7 @@
 #ifndef INCLUDE_OBJ_KIND_PADDLE_H
 #define INCLUDE_OBJ_KIND_PADDLE_H
 
+#include "lib/stack.h"
 #include "obj/kind/Field.h"
 
 #define PADDLE_DIR_DOWN 1
@@ -40,6 +41,10 @@
 #define PADDLE_SIZE_HEIGHT 8.0
 #define PADDLE_SIZE_WIDTH 1.0
 
+/* Instances */
+struct stack *Paddles;
+
+/* Base */
 typedef struct Paddle Paddle;
 Paddle *Paddle__delete (Paddle *this);
 Paddle *Paddle__new (Field *field);

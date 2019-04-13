@@ -24,6 +24,7 @@
 #define INCLUDE_OBJ_KIND_FIELD_H
 
 #include <curses.h>
+#include "lib/stack.h"
 
 #define FIELD_SIZE_HEIGHT 50.0
 #define FIELD_SIZE_WIDTH 80.0
@@ -33,6 +34,10 @@ enum {
 	FIELD_SCORE_POS_R,
 };
 
+/* Instances */
+struct stack *Fields;
+
+/* Base */
 typedef struct Field Field;
 Field *Field__delete (Field *this);
 Field *Field__new (void);

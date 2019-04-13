@@ -25,12 +25,15 @@
 #include <stdlib.h>
 
 #include "../../lib/math.h"
+#include "../../lib/stack.h"
 #include "../ifix/Coord.h"
 #include "../ifix/Size.h"
 #include "../ifix/Speed.h"
 #include "obj/kind/Field.h"
 
 #include "./Paddle.h"
+
+struct stack *Paddles = NULL;
 
 struct Paddle {
 	Coord *coord;
@@ -45,6 +48,7 @@ Paddle *Paddle__delete (Paddle *this)
 	Size__delete(this->size);
 	Speed__delete(this->speed);
 	free(this);
+	Paddles = stack_pop(stack_find(Paddles, this));
 	return NULL;
 }
 Paddle *Paddle__new (Field *field)
@@ -59,6 +63,7 @@ Paddle *Paddle__new (Field *field)
 			.speed = Speed__new(),
 		};
 		Paddle_resize(this, PADDLE_SIZE_WIDTH, PADDLE_SIZE_HEIGHT);
+		Paddles = stack_push(Paddles, this);
 	}
 	return this;
 }

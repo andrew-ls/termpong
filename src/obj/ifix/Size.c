@@ -22,8 +22,11 @@
 
 #include <stddef.h>
 #include <stdlib.h>
+#include "lib/stack.h"
 
 #include "./Size.h"
+
+struct stack *Sizes = NULL;
 
 struct Size {
 	double height;
@@ -32,6 +35,7 @@ struct Size {
 Size *Size__delete (Size *this)
 {
 	free(this);
+	Sizes = stack_pop(stack_find(Sizes, this));
 	return NULL;
 }
 Size *Size__new (void)
@@ -42,6 +46,7 @@ Size *Size__new (void)
 			.height = 0.0,
 			.width = 0.0,
 		};
+		Sizes = stack_push(Sizes, this);
 	}
 	return this;
 }
