@@ -37,8 +37,10 @@ Size *Size__delete (Size *this)
 Size *Size__new (void)
 {
 	Size *this = malloc(sizeof(*this));
-	this->height = 0.0;
-	this->width = 0.0;
+	*this = (Size) {
+		.height = 0.0,
+		.width = 0.0,
+	};
 	return this;
 }
 

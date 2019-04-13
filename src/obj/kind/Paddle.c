@@ -50,10 +50,13 @@ Paddle *Paddle__delete (Paddle *this)
 Paddle *Paddle__new (Field *field)
 {
 	Paddle *this = malloc(sizeof(*this));
-	this->coord = Coord__new();
-	this->field = field;
-	this->size = Size__new();
-	this->speed = Speed__new();
+	*this = (Paddle) {
+		.coord = Coord__new(),
+		.field = field,
+		.momentum = 0.0,
+		.size = Size__new(),
+		.speed = Speed__new(),
+	};
 	Paddle_resize(this, PADDLE_SIZE_WIDTH, PADDLE_SIZE_HEIGHT);
 	return this;
 }

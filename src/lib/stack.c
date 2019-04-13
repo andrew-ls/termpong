@@ -69,12 +69,14 @@ struct stack *stack_push (struct stack *next, void *body)
 {
 	struct stack *newnode = malloc(sizeof(*newnode));
 	if (newnode) {
+		*newnode = (struct stack) {
+			.prev = NULL,
+			.next = next,
+			.body = body,
+		};
 		if (next) {
 			next->prev = newnode;
 		}
-		newnode->prev = NULL;
-		newnode->next = next;
-		newnode->body = body;
 	}
 	return newnode;
 }

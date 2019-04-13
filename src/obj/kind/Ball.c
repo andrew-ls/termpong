@@ -47,10 +47,12 @@ Ball *Ball__delete (Ball *this)
 Ball *Ball__new (Field *field)
 {
 	Ball *this = malloc(sizeof(*this));
-	this->coord = Coord__new();
-	this->field = field;
-	this->size = Size__new();
-	this->speed = Speed__new();
+	*this = (Ball) {
+		.coord = Coord__new(),
+		.field = field,
+		.size = Size__new(),
+		.speed = Speed__new(),
+	};
 	Ball_resize(this, BALL_SIZE_WIDTH, BALL_SIZE_HEIGHT);
 	return this;
 }
