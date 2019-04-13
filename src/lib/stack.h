@@ -78,7 +78,7 @@ struct stack *stack_findval (
 );
 
 /*
- * Removes a node from memory, returning the next node (or NULL).
+ * Removes a node from memory, returning the new head node (or NULL).
  * Can remove nodes from the middle or tail of a stack.
  */
 struct stack *stack_pop (

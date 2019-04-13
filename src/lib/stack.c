@@ -57,12 +57,32 @@ struct stack *stack_findval (
 
 struct stack *stack_pop (struct stack *node)
 {
-	struct stack *nextnode = node->next;
-	if (node->prev) {
-		node->prev->next = nextnode;
+	if (node) {
+		struct stack *headnode;
+
+		/*
+		 * If this is the head node...
+		 */
+		if (!node->prev) {
+			headnode = node->next;
+		}
+		else {
+			node->prev->next = node->next;
+
+			/*
+			 * Find the new head node.
+			 */
+			headnode = node->prev;
+			while (headnode->prev) {
+				headnode = headnode->prev;
+			}
+		}
+		free(node);
+		return headnode;
 	}
-	free(node);
-	return nextnode;
+	else {
+		return node;
+	}
 }
 
 struct stack *stack_push (struct stack *next, void *body)
