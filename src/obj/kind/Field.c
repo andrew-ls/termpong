@@ -42,8 +42,10 @@ Field *Field__delete (Field *this)
 Field *Field__new (void)
 {
 	Field *this = malloc(sizeof(*this));
-	this->size = Size__new();
-	this->window = NULL;
+	*this = (Field) {
+		.size = Size__new(),
+		.window = NULL,
+	};
 	Field_resize(this, (int) FIELD_SIZE_WIDTH, FIELD_SIZE_HEIGHT);
 	return this;
 }

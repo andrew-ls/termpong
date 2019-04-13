@@ -37,8 +37,10 @@ Coord *Coord__delete (Coord *this)
 Coord *Coord__new (void)
 {
 	Coord *this = malloc(sizeof(*this));
-	this->x = 0.0;
-	this->y = 0.0;
+	*this = (Coord) {
+		.x = 0.0,
+		.y = 0.0,
+	};
 	return this;
 }
 

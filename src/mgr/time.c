@@ -102,9 +102,8 @@ struct timespec timespec_compare (
 	struct timespec *timespec_2
 )
 {
-	struct timespec timespec_diff = {
+	return (struct timespec) {
 		.tv_sec = timespec_1->tv_sec - timespec_2->tv_sec,
 		.tv_nsec = timespec_1->tv_nsec - timespec_2->tv_nsec,
 	};
-	return timespec_diff;
 }

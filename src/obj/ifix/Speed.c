@@ -37,8 +37,10 @@ Speed *Speed__delete (Speed *this)
 Speed *Speed__new (void)
 {
 	Speed *this = malloc(sizeof(*this));
-	this->x = 0.0;
-	this->y = 0.0;
+	*this = (Speed) {
+		.x = 0.0,
+		.y = 0.0,
+	};
 	return this;
 }
 
