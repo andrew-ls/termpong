@@ -33,16 +33,18 @@
  * Below is a visual representation of a stack containing 3 nodes;
  * lines with an arrow head represent pointers:
  *
- *   HEAD                  TAIL
- * ┌──────┐   ┌──────┐   ┌──────┐
- * │ next ────> next ────> next ────> NULL
- * ├──────┤   ├──────┤   ├──────┤
- * │ body ──┐ │ body ──┐ │ body ──┐
- * └──────┘ │ └──────┘ │ └──────┘ │
- *          │          │          │
- * ┌──────┐ │ ┌──────┐ │ ┌──────┐ │
- * │ ???? <─┘ │ ???? <─┘ │ ???? <─┘
- * └──────┘   └──────┘   └──────┘
+ *            HEAD                  TAIL
+ *          ┌──────┐   ┌──────┐   ┌──────┐
+ * NULL <──── prev <──── prev <──── prev │
+ *          ├──────┤   ├──────┤   ├──────┤
+ *          │ next ────> next ────> next ────> NULL
+ *          ├──────┤   ├──────┤   ├──────┤
+ *          │ body ──┐ │ body ──┐ │ body ──┐
+ *          └──────┘ │ └──────┘ │ └──────┘ │
+ *                   │          │          │
+ *          ┌──────┐ │ ┌──────┐ │ ┌──────┐ │
+ *          │ ???? <─┘ │ ???? <─┘ │ ???? <─┘
+ *          └──────┘   └──────┘   └──────┘
  */
 
 #include <stdbool.h>
@@ -51,6 +53,7 @@
  * Metadata for a stack node.
  */
 struct stack {
+	struct stack *prev;
 	struct stack *next;
 	void *body;
 };
@@ -76,6 +79,7 @@ struct stack *stack_findval (
 
 /*
  * Removes a node from memory, returning the next node (or NULL).
+ * Can remove nodes from the middle or tail of a stack.
  */
 struct stack *stack_pop (
 	struct stack *node
