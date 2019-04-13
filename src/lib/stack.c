@@ -25,6 +25,8 @@
 #include <stdlib.h>
 
 #include "./stack.h"
+struct stack *stack_gethead (struct stack *);
+bool stack_ishead (struct stack *);
 
 struct stack *stack_find (struct stack *node, void *pointer)
 {
@@ -55,33 +57,36 @@ struct stack *stack_findval (
 	return NULL;
 }
 
+struct stack *stack_gethead (struct stack *node)
+{
+	return node
+		? stack_ishead(node)
+			? node
+			: stack_gethead(node->prev)
+		: NULL;
+}
+
+inline bool stack_ishead (struct stack *node)
+{
+	return node->prev == NULL;
+}
+
 struct stack *stack_pop (struct stack *node)
 {
 	if (node) {
 		struct stack *headnode;
-
-		/*
-		 * If this is the head node...
-		 */
-		if (!node->prev) {
+		if (stack_ishead(node)) {
 			headnode = node->next;
 		}
 		else {
 			node->prev->next = node->next;
-
-			/*
-			 * Find the new head node.
-			 */
-			headnode = node->prev;
-			while (headnode->prev) {
-				headnode = headnode->prev;
-			}
+			headnode = stack_gethead(node->prev);
 		}
 		free(node);
 		return headnode;
 	}
 	else {
-		return node;
+		return NULL;
 	}
 }
 
