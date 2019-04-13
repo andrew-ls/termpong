@@ -23,6 +23,12 @@
 #ifndef INCLUDE_OBJ_IFIX_SIZE_H
 #define INCLUDE_OBJ_IFIX_SIZE_H
 
+#include "lib/stack.h"
+
+/* Instances */
+struct stack *Sizes;
+
+/* Base */
 typedef struct Size Size;
 Size *Size__delete (Size *this);
 Size *Size__new (void);

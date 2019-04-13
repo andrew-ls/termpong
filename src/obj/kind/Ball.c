@@ -23,12 +23,15 @@
 #include <stddef.h>
 #include <stdlib.h>
 
+#include "../../lib/stack.h"
 #include "../ifix/Coord.h"
 #include "../ifix/Size.h"
 #include "../ifix/Speed.h"
 #include "obj/kind/Field.h"
 
 #include "./Ball.h"
+
+struct stack *Balls = NULL;
 
 struct Ball {
 	Coord *coord;
@@ -42,6 +45,7 @@ Ball *Ball__delete (Ball *this)
 	Size__delete(this->size);
 	Speed__delete(this->speed);
 	free(this);
+	Balls = stack_pop(stack_find(Balls, this));
 	return NULL;
 }
 Ball *Ball__new (Field *field)
@@ -55,6 +59,7 @@ Ball *Ball__new (Field *field)
 			.speed = Speed__new(),
 		};
 		Ball_resize(this, BALL_SIZE_WIDTH, BALL_SIZE_HEIGHT);
+		Balls = stack_push(Balls, this);
 	}
 	return this;
 }

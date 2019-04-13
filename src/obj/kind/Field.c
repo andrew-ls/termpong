@@ -24,9 +24,12 @@
 #include <stddef.h>
 #include <stdlib.h>
 #include "gfx/char.h"
+#include "lib/stack.h"
 #include "obj/ifix/Size.h"
 
 #include "./Field.h"
+
+struct stack *Fields = NULL;
 
 struct Field {
 	Size *size;
@@ -37,6 +40,7 @@ Field *Field__delete (Field *this)
 	Size__delete(this->size);
 	delwin(this->window);
 	free(this);
+	Fields = stack_pop(stack_find(Fields, this));
 	return NULL;
 }
 Field *Field__new (void)
@@ -48,6 +52,7 @@ Field *Field__new (void)
 			.window = NULL,
 		};
 		Field_resize(this, (int) FIELD_SIZE_WIDTH, FIELD_SIZE_HEIGHT);
+		Fields = stack_push(Fields, this);
 	}
 	return this;
 }

@@ -23,6 +23,12 @@
 #ifndef INCLUDE_OBJ_IFIX_SPEED_H
 #define INCLUDE_OBJ_IFIX_SPEED_H
 
+#include "lib/stack.h"
+
+/* Instances */
+struct stack *Speeds;
+
+/* Base */
 typedef struct Speed Speed;
 Speed *Speed__delete (Speed *this);
 Speed *Speed__new (void);

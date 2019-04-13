@@ -22,8 +22,11 @@
 
 #include <stddef.h>
 #include <stdlib.h>
+#include "lib/stack.h"
 
 #include "./Speed.h"
+
+struct stack *Speeds = NULL;
 
 struct Speed {
 	double x;
@@ -32,6 +35,7 @@ struct Speed {
 Speed *Speed__delete (Speed *this)
 {
 	free(this);
+	Speeds = stack_pop(stack_find(Speeds, this));
 	return NULL;
 }
 Speed *Speed__new (void)
@@ -42,6 +46,7 @@ Speed *Speed__new (void)
 			.x = 0.0,
 			.y = 0.0,
 		};
+		Speeds = stack_push(Speeds, this);
 	}
 	return this;
 }
