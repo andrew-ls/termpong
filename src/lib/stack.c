@@ -58,6 +58,9 @@ struct stack *stack_findval (
 struct stack *stack_pop (struct stack *node)
 {
 	struct stack *nextnode = node->next;
+	if (node->prev) {
+		node->prev->next = nextnode;
+	}
 	free(node);
 	return nextnode;
 }
@@ -66,6 +69,10 @@ struct stack *stack_push (struct stack *next, void *body)
 {
 	struct stack *newnode = malloc(sizeof(*newnode));
 	if (newnode) {
+		if (next) {
+			next->prev = newnode;
+		}
+		newnode->prev = NULL;
 		newnode->next = next;
 		newnode->body = body;
 	}
