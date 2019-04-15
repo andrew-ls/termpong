@@ -23,12 +23,11 @@
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdlib.h>
-
-#include "../../lib/math.h"
-#include "../../lib/stack.h"
-#include "../ifix/Coord.h"
-#include "../ifix/Size.h"
-#include "../ifix/Speed.h"
+#include "lib/math.h"
+#include "lib/stack.h"
+#include "obj/ifix/Coord.h"
+#include "obj/ifix/Size.h"
+#include "obj/ifix/Speed.h"
 #include "obj/kind/Field.h"
 
 #include "./Paddle.h"
