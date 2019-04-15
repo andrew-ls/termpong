@@ -65,19 +65,19 @@ Ball *Ball__new (Field *field)
 }
 
 /* Interface: Coord */
-double Ball_getX (Ball *this) { return Coord_getX(this->coord); }
-double Ball_getY (Ball *this) { return Coord_getY(this->coord); }
-void Ball_shift (Ball *this, double x, double y) { Coord_shift(this->coord, x, y); }
-void Ball_translocate (Ball *this, double x, double y) { Coord_translocate(this->coord, x, y); }
+inline double Ball_getX (Ball *this) { return Coord_getX(this->coord); }
+inline double Ball_getY (Ball *this) { return Coord_getY(this->coord); }
+inline void Ball_shift (Ball *this, double x, double y) { Coord_shift(this->coord, x, y); }
+inline void Ball_translocate (Ball *this, double x, double y) { Coord_translocate(this->coord, x, y); }
 
 /* Interface: Size */
-double Ball_getHeight (Ball *this) { return Size_getHeight(this->size); }
-double Ball_getWidth (Ball *this) { return Size_getWidth(this->size); }
-void Ball_resize (Ball *this, double width, double height) { Size_resize(this->size, width, height); }
+inline double Ball_getHeight (Ball *this) { return Size_getHeight(this->size); }
+inline double Ball_getWidth (Ball *this) { return Size_getWidth(this->size); }
+inline void Ball_resize (Ball *this, double width, double height) { Size_resize(this->size, width, height); }
 
 /* Interface: Speed */
-void Ball_accelerate (Ball *this, double x, double y) { Speed_accelerate(this->speed, x, y); }
-double Ball_getXSpeed (Ball *this) { return Speed_getXSpeed(this->speed); }
-double Ball_getYSpeed (Ball *this) { return Speed_getYSpeed(this->speed); }
-void Ball_propel (Ball *this, double x, double y) { Speed_propel(this->speed, x, y); }
-void Ball_translate (Ball *this, double mult) { Speed_translate(this->speed, mult, this, Ball_shift); }
+inline void Ball_accelerate (Ball *this, double x, double y) { Speed_accelerate(this->speed, x, y); }
+inline double Ball_getXSpeed (Ball *this) { return Speed_getXSpeed(this->speed); }
+inline double Ball_getYSpeed (Ball *this) { return Speed_getYSpeed(this->speed); }
+inline void Ball_propel (Ball *this, double x, double y) { Speed_propel(this->speed, x, y); }
+inline void Ball_translate (Ball *this, double mult) { Speed_translate(this->speed, mult, this, Ball_shift); }
