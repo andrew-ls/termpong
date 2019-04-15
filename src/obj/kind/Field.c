@@ -58,8 +58,8 @@ Field *Field__new (void)
 }
 
 /* Interface: Size */
-double Field_getHeight (Field *this) { return Size_getHeight(this->size); }
-double Field_getWidth (Field *this) { return Size_getWidth(this->size); }
+inline double Field_getHeight (Field *this) { return Size_getHeight(this->size); }
+inline double Field_getWidth (Field *this) { return Size_getWidth(this->size); }
 void Field_resize (Field *this, double width, double height) {
 	delwin(this->window);
 	this->window = newwin((int) height, (int) width, 0, 0);

@@ -69,21 +69,21 @@ Paddle *Paddle__new (Field *field)
 }
 
 /* Interface: Coord */
-double Paddle_getX (Paddle *this) { return Coord_getX(this->coord); }
-double Paddle_getY (Paddle *this) { return Coord_getY(this->coord); }
-void Paddle_shift (Paddle *this, double x, double y) { Coord_shift(this->coord, x, y); }
-void Paddle_translocate (Paddle *this, double x, double y) { Coord_translocate(this->coord, x, y); }
+inline double Paddle_getX (Paddle *this) { return Coord_getX(this->coord); }
+inline double Paddle_getY (Paddle *this) { return Coord_getY(this->coord); }
+inline void Paddle_shift (Paddle *this, double x, double y) { Coord_shift(this->coord, x, y); }
+inline void Paddle_translocate (Paddle *this, double x, double y) { Coord_translocate(this->coord, x, y); }
 
 /* Interface: Size */
-double Paddle_getHeight (Paddle *this) { return Size_getHeight(this->size); }
-double Paddle_getWidth (Paddle *this) { return Size_getWidth(this->size); }
-void Paddle_resize (Paddle *this, double width, double height) { Size_resize(this->size, width, height); }
+inline double Paddle_getHeight (Paddle *this) { return Size_getHeight(this->size); }
+inline double Paddle_getWidth (Paddle *this) { return Size_getWidth(this->size); }
+inline void Paddle_resize (Paddle *this, double width, double height) { Size_resize(this->size, width, height); }
 
 /* Interface: Speed */
-void Paddle_accelerate (Paddle *this, double x, double y) { Speed_accelerate(this->speed, x, y); }
-double Paddle_getXSpeed (Paddle *this) { return Speed_getXSpeed(this->speed); }
-double Paddle_getYSpeed (Paddle *this) { return Speed_getYSpeed(this->speed); }
-void Paddle_propel (Paddle *this, double x, double y) { Speed_propel(this->speed, x, y); }
+inline void Paddle_accelerate (Paddle *this, double x, double y) { Speed_accelerate(this->speed, x, y); }
+inline double Paddle_getXSpeed (Paddle *this) { return Speed_getXSpeed(this->speed); }
+inline double Paddle_getYSpeed (Paddle *this) { return Speed_getYSpeed(this->speed); }
+inline void Paddle_propel (Paddle *this, double x, double y) { Speed_propel(this->speed, x, y); }
 void Paddle_translate (Paddle *this, double mult) {
 	Speed_translate(this->speed, mult, this, Paddle_shift);
 
