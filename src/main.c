@@ -33,7 +33,7 @@
 #include "obj/kind/Paddle.h"
 
 void game_draw (void);
-void game_exit (int status);
+void game_exit ();
 void game_init (void);
 void game_round_new (void);
 void game_tick (void);
@@ -72,10 +72,9 @@ void game_draw (void)
 	wrefresh(Field_getWindow(field));
 }
 
-void game_exit (int status)
+void game_exit (void)
 {
 	endwin();
-	exit(status);
 }
 
 void game_init (void)
@@ -121,7 +120,7 @@ void game_tick (void)
 	input_clear();
 	input_poll();
 	if (input_find(KEY_F(1))) {
-		game_exit(0);
+		exit(0);
 	}
 	time_tick(); /* The first time tick will have a delta of 0. */
 
@@ -231,9 +230,10 @@ int main (void)
 {
 	setlocale(LC_ALL, "C.UTF8");
 	game_init();
+	atexit(game_exit);
 	while (1) {
 		game_tick();
 		game_draw();
 	}
-	game_exit(0);
+	exit(0);
 }
