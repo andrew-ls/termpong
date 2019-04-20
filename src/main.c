@@ -52,22 +52,22 @@ void game_draw (void)
 	Field_drawScore(field, score_l, FIELD_SCORE_POS_L);
 	Field_drawScore(field, score_r, FIELD_SCORE_POS_R);
 	char_drawrect(Field_getWindow(field),
-		ROUND(Paddle_getY(paddle_l)),
-		ROUND(Paddle_getX(paddle_l)),
-		(int) Paddle_getHeight(paddle_l),
-		(int) Paddle_getWidth(paddle_l)
+		ROUND(Coord_getY(paddle_l->coord)),
+		ROUND(Coord_getX(paddle_l->coord)),
+		(int) Size_getHeight(paddle_l->size),
+		(int) Size_getWidth(paddle_l->size)
 	);
 	char_drawrect(Field_getWindow(field),
-		ROUND(Paddle_getY(paddle_r)),
-		ROUND(Paddle_getX(paddle_r)),
-		(int) Paddle_getHeight(paddle_r),
-		(int) Paddle_getWidth(paddle_r)
+		ROUND(Coord_getY(paddle_r->coord)),
+		ROUND(Coord_getX(paddle_r->coord)),
+		(int) Size_getHeight(paddle_r->size),
+		(int) Size_getWidth(paddle_r->size)
 	);
 	char_drawrect(Field_getWindow(field),
-		ROUND(Ball_getY(ball)),
-		ROUND(Ball_getX(ball)),
-		(int) Ball_getHeight(ball),
-		(int) Ball_getWidth(ball)
+		ROUND(Coord_getY(ball->coord)),
+		ROUND(Coord_getX(ball->coord)),
+		(int) Size_getHeight(ball->size),
+		(int) Size_getWidth(ball->size)
 	);
 	wrefresh(Field_getWindow(field));
 }
@@ -91,9 +91,9 @@ void game_init (void)
 	meta(stdscr, true); /* Force 8 bits for input */
 
 	field = Field__new();
-	ball = Ball__new(field);
-	paddle_l = Paddle__new(field);
-	paddle_r = Paddle__new(field);
+	ball = Ball__new(field->size);
+	paddle_l = Paddle__new(field->size);
+	paddle_r = Paddle__new(field->size);
 	score_l = 0;
 	score_r = 0;
 
@@ -103,16 +103,20 @@ void game_init (void)
 void game_round_new (void)
 {
 	collision_ball_passed_paddle = false;
-	Ball_translocate(ball,
-		(Field_getWidth(field) / 2.0) - (Ball_getWidth(ball) / 2.0),
-		(Field_getHeight(field) / 2.0) - (Ball_getHeight(ball) / 2.0));
-	Ball_propel(ball, -20.0, 0.0);
-	Paddle_translocate(paddle_l,
+	Coord_translocate(ball->coord,
+		(Size_getWidth(field->size) / 2.0)
+			- (Size_getWidth(ball->size) / 2.0),
+		(Size_getHeight(field->size) / 2.0)
+			- (Size_getHeight(ball->size) / 2.0));
+	Speed_propel(ball->speed, -20.0, 0.0);
+	Coord_translocate(paddle_l->coord,
 		8.0,
-		(Field_getHeight(field) / 2.0) - (Paddle_getHeight(paddle_l) / 2.0));
-	Paddle_translocate(paddle_r,
-		Field_getWidth(field) - Paddle_getWidth(paddle_r) - 8.0,
-		(Field_getHeight(field) / 2.0) - (Paddle_getHeight(paddle_l) / 2.0));
+		(Size_getHeight(field->size) / 2.0)
+			- (Size_getHeight(paddle_l->size) / 2.0));
+	Coord_translocate(paddle_r->coord,
+		Size_getWidth(field->size) - Size_getWidth(paddle_r->size) - 8.0,
+		(Size_getHeight(field->size) / 2.0)
+			- (Size_getHeight(paddle_l->size) / 2.0));
 }
 
 void game_tick (void)
@@ -142,21 +146,24 @@ void game_tick (void)
 	 * Move ball and paddles, scaled by the time delta for this game tick.
 	 * Additionally apply a frictional force to slow the paddle down.
 	 */
-	Ball_translate(ball, time_delta());
-	Paddle_translate(paddle_l, time_delta());
-	Paddle_translate(paddle_r, time_delta());
+	Speed_translate(ball->speed, time_delta());
+	Speed_translate(paddle_l->speed, time_delta());
+	Speed_translate(paddle_r->speed, time_delta());
 	Paddle_applyFriction(paddle_l, PADDLE_FRICTION, time_delta());
 	Paddle_applyFriction(paddle_r, PADDLE_FRICTION, time_delta());
 
 	/*
 	 * When the ball passes the field's left and right sides,
 	 */
-	if (Ball_getX(ball) < 0.0) {
+	if (Coord_getX(ball->coord) < 0.0) {
 		score_r += 1;
 		game_round_new();
 		return;
 	}
-	else if (Ball_getX(ball) + Ball_getWidth(ball) > Field_getWidth(field)) {
+	else if (
+		Coord_getX(ball->coord) + Size_getWidth(ball->size)
+			> Size_getWidth(field->size)
+	) {
 		score_l += 1;
 		game_round_new();
 		return;
@@ -166,16 +173,25 @@ void game_tick (void)
 	 * Bounce the ball off the walls.
 	 * The ball's movement beyond the field is added to the rebound.
 	 */
-	if (Ball_getY(ball) < 0.0) {
-		Ball_translocate(ball, Ball_getX(ball), 0 - Ball_getY(ball));
-		Ball_propel(ball, Ball_getXSpeed(ball), -Ball_getYSpeed(ball));
+	if (Coord_getY(ball->coord) < 0.0) {
+		Coord_translocate(ball->coord,
+			Coord_getX(ball->coord),
+			0 - Coord_getY(ball->coord));
+		Speed_propel(ball->speed,
+			Speed_getXSpeed(ball->speed),
+			-Speed_getYSpeed(ball->speed));
 	}
-	else if (Ball_getY(ball) + Ball_getHeight(ball) > Field_getHeight(field)) {
-		Ball_translocate(ball,
-			Ball_getX(ball),
-			(Field_getHeight(field) * 2)
-				- Ball_getY(ball) - Ball_getHeight(ball));
-		Ball_propel(ball, Ball_getXSpeed(ball), -Ball_getYSpeed(ball));
+	else if (
+		Coord_getY(ball->coord) + Size_getHeight(ball->size)
+			> Size_getHeight(field->size)
+	) {
+		Coord_translocate(ball->coord,
+			Coord_getX(ball->coord),
+			(Size_getHeight(field->size) * 2)
+				- Coord_getY(ball->coord) - Size_getHeight(ball->size));
+		Speed_propel(ball->speed,
+			Speed_getXSpeed(ball->speed),
+			-Speed_getYSpeed(ball->speed));
 	}
 
 	/*
@@ -183,41 +199,44 @@ void game_tick (void)
 	 * The ball's movement beyond the paddle is added to the rebound.
 	 */
 	if (!collision_ball_passed_paddle) {
-		if (Ball_getX(ball)
-			< Paddle_getX(paddle_l) + Paddle_getWidth(paddle_l)
+		if (Coord_getX(ball->coord)
+			< Coord_getX(paddle_l->coord) + Size_getWidth(paddle_l->size)
 		) {
 			if (
-				Ball_getY(ball) > Paddle_getY(paddle_l)
-				&& Ball_getY(ball) + Ball_getHeight(ball)
-					< Paddle_getY(paddle_l) + Paddle_getHeight(paddle_l)
+				Coord_getY(ball->coord) > Coord_getY(paddle_l->coord)
+				&& Coord_getY(ball->coord) + Size_getHeight(ball->size)
+					< Coord_getY(paddle_l->coord)
+						+ Size_getHeight(paddle_l->size)
 			) {
-				Ball_translocate(ball,
-					(Paddle_getX(paddle_l) + Paddle_getWidth(paddle_l)) * 2
-						- Ball_getX(ball),
-					Ball_getY(ball));
-				Ball_propel(ball,
-					-Ball_getXSpeed(ball),
-					Ball_getYSpeed(ball));
+				Coord_translocate(ball->coord,
+					(Coord_getX(paddle_l->coord)
+						+ Size_getWidth(paddle_l->size))
+						* 2 - Coord_getX(ball->coord),
+					Coord_getY(ball->coord));
+				Speed_propel(ball->speed,
+					-Speed_getXSpeed(ball->speed),
+					Speed_getYSpeed(ball->speed));
 			}
 			else {
 				collision_ball_passed_paddle = true;
 			}
 		}
-		else if (Ball_getX(ball) + Ball_getWidth(ball)
-			> Paddle_getX(paddle_r)
+		else if (Coord_getX(ball->coord) + Size_getWidth(ball->size)
+			> Coord_getX(paddle_r->coord)
 		) {
 			if (
-				Ball_getY(ball) > Paddle_getY(paddle_r)
-				&& Ball_getY(ball) + Ball_getHeight(ball)
-					< Paddle_getY(paddle_r) + Paddle_getHeight(paddle_r)
+				Coord_getY(ball->coord) > Coord_getY(paddle_r->coord)
+				&& Coord_getY(ball->coord) + Size_getHeight(ball->size)
+					< Coord_getY(paddle_r->coord)
+						+ Size_getHeight(paddle_r->size)
 			) {
-				Ball_translocate(ball,
-					(Paddle_getX(paddle_r) - Ball_getWidth(ball)) * 2
-						- Ball_getX(ball),
-					Ball_getY(ball));
-				Ball_propel(ball,
-					-Ball_getXSpeed(ball),
-					Ball_getYSpeed(ball));
+				Coord_translocate(ball->coord,
+					(Coord_getX(paddle_r->coord) - Size_getWidth(ball->size))
+						* 2 - Coord_getX(ball->coord),
+					Coord_getY(ball->coord));
+				Speed_propel(ball->speed,
+					-Speed_getXSpeed(ball->speed),
+					Speed_getYSpeed(ball->speed));
 			}
 			else {
 				collision_ball_passed_paddle = true;

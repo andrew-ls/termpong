@@ -24,51 +24,65 @@
 #include <stdlib.h>
 #include "lib/stack.h"
 
-#include "./Coord.h"
-
-struct stack *Coords = NULL;
-
-struct Coord {
+#include "./Speed.h"
+struct Speed {
+	void *assignee;
+	struct Speed__callbacks callbacks;
 	double x;
 	double y;
 };
-Coord *Coord__delete (Coord *this)
+
+struct stack *Speeds = NULL;
+
+Speed *Speed__delete (Speed *this)
 {
 	free(this);
-	Coords = stack_pop(stack_find(Coords, this));
+	Speeds = stack_pop(stack_find(Speeds, this));
 	return NULL;
 }
-Coord *Coord__new (void)
+
+Speed *Speed__new (void *assignee, struct Speed__callbacks callbacks)
 {
-	Coord *this = malloc(sizeof(*this));
+	Speed *this = malloc(sizeof(*this));
 	if (this) {
-		*this = (Coord) {
+		*this = (Speed) {
+			.assignee = assignee,
+			.callbacks = callbacks,
 			.x = 0.0,
 			.y = 0.0,
 		};
-		Coords = stack_push(Coords, this);
+		Speeds = stack_push(Speeds, this);
 	}
 	return this;
 }
 
-double Coord_getX (Coord *this)
-{
-	return this->x;
-}
-
-double Coord_getY (Coord *this)
-{
-	return this->y;
-}
-
-void Coord_shift (Coord *this, double x, double y)
+void Speed_accelerate (Speed *this, double x, double y)
 {
 	this->x += x;
 	this->y += y;
 }
 
-void Coord_translocate (Coord *this, double x, double y)
+double Speed_getXSpeed (Speed *this)
+{
+	return this->x;
+}
+
+double Speed_getYSpeed (Speed *this)
+{
+	return this->y;
+}
+
+void Speed_propel (Speed *this, double x, double y)
 {
 	this->x = x;
 	this->y = y;
+}
+
+void Speed_translate (Speed *this, double mult)
+{
+	if (this->callbacks.translate) {
+		this->callbacks.translate(this->assignee,
+			this->x * mult,
+			this->y * mult);
+	}
 }

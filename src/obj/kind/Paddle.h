@@ -25,6 +25,10 @@
 
 #include "lib/stack.h"
 #include "obj/kind/Field.h"
+#include "obj/role/Coord.h"
+#include "obj/role/Private.h"
+#include "obj/role/Size.h"
+#include "obj/role/Speed.h"
 
 #define PADDLE_DIR_DOWN 1
 #define PADDLE_DIR_UP -1
@@ -41,31 +45,31 @@
 #define PADDLE_SIZE_HEIGHT 8.0
 #define PADDLE_SIZE_WIDTH 1.0
 
-/* Instances */
+/*
+ * Instances.
+ */
 struct stack *Paddles;
 
-/* Base */
+/*
+ * Object.
+ */
+struct Paddle {
+	Coord *coord;
+	Private *private;
+	Size *size;
+	Speed *speed;
+};
 typedef struct Paddle Paddle;
+
+/*
+ * Destructor.
+ */
 Paddle *Paddle__delete (Paddle *this);
-Paddle *Paddle__new (Field *field);
 
-/* Interface: Coord */
-double Paddle_getX (Paddle *this);
-double Paddle_getY (Paddle *this);
-void Paddle_shift (Paddle *this, double x, double y);
-void Paddle_translocate (Paddle *this, double x, double y);
-
-/* Interface: Size */
-double Paddle_getHeight (Paddle *this);
-double Paddle_getWidth (Paddle *this);
-void Paddle_resize (Paddle *this, double width, double height);
-
-/* Interface: Speed */
-void Paddle_accelerate (Paddle *this, double x, double y);
-double Paddle_getXSpeed (Paddle *this);
-double Paddle_getYSpeed (Paddle *this);
-void Paddle_propel (Paddle *this, double x, double y);
-void Paddle_translate (Paddle *this, double mult);
+/*
+ * Constructor.
+ */
+Paddle *Paddle__new (Size *bounds);
 
 /*
  * Reduces the current speed.

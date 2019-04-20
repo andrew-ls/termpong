@@ -20,61 +20,62 @@
  * along with this file. If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef INCLUDE_OBJ_IFIX_SPEED_H
-#define INCLUDE_OBJ_IFIX_SPEED_H
+#ifndef INCLUDE_OBJ_ROLE_SPEED_H
+#define INCLUDE_OBJ_ROLE_SPEED_H
 
 #include "lib/stack.h"
 
-/* Instances */
+/*
+ * Instances.
+ */
 struct stack *Speeds;
 
-/* Base */
+/*
+ * Type.
+ */
 typedef struct Speed Speed;
-Speed *Speed__delete (Speed *this);
-Speed *Speed__new (void);
 
 /*
- * Implementation:
- * void ?_accelerate (? *this, double x, double y);
- *
+ * Callbacks.
+ */
+struct Speed__callbacks {
+	void (*translate)(void *assignee, double x, double y);
+};
+
+/*
+ * Destructor.
+ */
+Speed *Speed__delete (Speed *this);
+
+/*
+ * Constructor.
+ */
+Speed *Speed__new (void *assignee, struct Speed__callbacks callbacks);
+
+/*
  * Adds to the current speed.
  */
 void Speed_accelerate (Speed *this, double x, double y);
 
 /*
- * Implementation:
- * double ?_getXSpeed (? *this);
- *
  * Returns the current X speed.
  */
 double Speed_getXSpeed (Speed *this);
 
 /*
- * Implementation:
- * double ?_getYSpeed (? *this);
- *
  * Returns the current Y speed.
  */
 double Speed_getYSpeed (Speed *this);
 
 /*
- * Implementation:
- * void ?_propel (? *this, double x, double y);
- *
  * Applies absolute speed values.
  */
 void Speed_propel (Speed *this, double x, double y);
 
 /*
- * Implementation:
- * void ?_translate (? *this, double mult);
- *
  * Translates the current X and Y speeds (multiplied) to relative X and Y
- * coordinates, applied to a translator instance using a translation function.
+ * coordinates, applying them to the `translate` callback.
  */
-void Speed_translate (Speed *this,
-	double mult,
-	void *translator,
-	void (*translation)());
+void Speed_translate (Speed *this, double mult);
 
 #endif

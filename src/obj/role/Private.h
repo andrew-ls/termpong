@@ -20,42 +20,41 @@
  * along with this file. If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef INCLUDE_OBJ_KIND_BALL_H
-#define INCLUDE_OBJ_KIND_BALL_H
+#ifndef INCLUDE_OBJ_ROLE_PRIVATE_H
+#define INCLUDE_OBJ_ROLE_PRIVATE_H
 
+/*
+ * A role for private storage unique to the assignee.
+ * The Private role is special, in that the assignee defines and manages the
+ * data pointed to: this should be a file scope struct, also named `private`.
+ * To access the members within this struct, the Private role pointer must be
+ * cast to a struct pointer, e.g.: ((struct private *) (this->private))->member
+ * Alternatively, assign a variable: struct private *private = this->private
+ */
+
+#include <stddef.h>
 #include "lib/stack.h"
-#include "obj/role/Coord.h"
-#include "obj/role/Private.h"
-#include "obj/role/Size.h"
-#include "obj/role/Speed.h"
-
-#define BALL_SIZE_HEIGHT 1.0
-#define BALL_SIZE_WIDTH 1.0
 
 /*
  * Instances.
  */
-struct stack *Balls;
+struct stack *Privates;
 
 /*
- * Object.
+ * Type.
  */
-struct Ball {
-	Coord *coord;
-	Private *private;
-	Size *size;
-	Speed *speed;
-};
-typedef struct Ball Ball;
+typedef void Private;
 
 /*
  * Destructor.
  */
-Ball *Ball__delete (Ball *this);
+Private *Private__delete (Private *this);
 
 /*
  * Constructor.
+ * This will allocate memory for the assignee's private storage struct;
+ * the `size` parameter refers to the size of this (in bytes).
  */
-Ball *Ball__new (Size *bounds);
+Private *Private__new (void *assignee, size_t size);
 
 #endif

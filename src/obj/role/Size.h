@@ -20,49 +20,49 @@
  * along with this file. If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <stddef.h>
-#include <stdlib.h>
+#ifndef INCLUDE_OBJ_ROLE_SIZE_H
+#define INCLUDE_OBJ_ROLE_SIZE_H
+
 #include "lib/stack.h"
 
-#include "./Size.h"
+/*
+ * Instances.
+ */
+struct stack *Sizes;
 
-struct stack *Sizes = NULL;
+/*
+ * Type.
+ */
+typedef struct Size Size;
 
-struct Size {
-	double height;
-	double width;
-};
-Size *Size__delete (Size *this)
-{
-	free(this);
-	Sizes = stack_pop(stack_find(Sizes, this));
-	return NULL;
-}
-Size *Size__new (void)
-{
-	Size *this = malloc(sizeof(*this));
-	if (this) {
-		*this = (Size) {
-			.height = 0.0,
-			.width = 0.0,
-		};
-		Sizes = stack_push(Sizes, this);
-	}
-	return this;
-}
+/*
+ * Callbacks.
+ */
+struct Size__callbacks {};
 
-double Size_getHeight (Size *this)
-{
-	return this->height;
-}
+/*
+ * Destructor.
+ */
+Size *Size__delete (Size *this);
 
-double Size_getWidth (Size *this)
-{
-	return this->width;
-}
+/*
+ * Constructor.
+ */
+Size *Size__new (void *assignee, struct Size__callbacks callbacks);
 
-void Size_resize (Size *this, double width, double height)
-{
-	this->width = width;
-	this->height = height;
-}
+/*
+ * Returns the current height.
+ */
+double Size_getHeight (Size *this);
+
+/*
+ * Returns the current width.
+ */
+double Size_getWidth (Size *this);
+
+/*
+ * Resizes.
+ */
+void Size_resize (Size *this, double width, double height);
+
+#endif

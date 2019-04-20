@@ -20,41 +20,26 @@
  * along with this file. If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef INCLUDE_OBJ_IFIX_SIZE_H
-#define INCLUDE_OBJ_IFIX_SIZE_H
-
+#include <stddef.h>
+#include <stdlib.h>
 #include "lib/stack.h"
 
-/* Instances */
-struct stack *Sizes;
+#include "./Private.h"
 
-/* Base */
-typedef struct Size Size;
-Size *Size__delete (Size *this);
-Size *Size__new (void);
+struct stack *Privates = NULL;
 
-/*
- * Implementation:
- * double ?_getHeight (? *this);
- *
- * Returns the current height.
- */
-double Size_getHeight (Size *this);
+Private *Private__delete (Private *this)
+{
+	free(this);
+	Privates = stack_pop(stack_find(Privates, this));
+	return NULL;
+}
 
-/*
- * Implementation:
- * double ?_getWidth (? *this);
- *
- * Returns the current width.
- */
-double Size_getWidth (Size *this);
-
-/*
- * Implementation:
- * void ?_resize (? *this, double width, double height);
- *
- * Resizes.
- */
-void Size_resize (Size *this, double width, double height);
-
-#endif
+Private *Private__new (void *parent, size_t size)
+{
+	Private *this = malloc(size);
+	if (this) {
+		Privates = stack_push(Privates, this);
+	}
+	return this;
+}

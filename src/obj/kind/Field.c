@@ -25,45 +25,43 @@
 #include <stdlib.h>
 #include "gfx/char.h"
 #include "lib/stack.h"
-#include "obj/ifix/Size.h"
+#include "obj/role/Private.h"
+#include "obj/role/Size.h"
 
 #include "./Field.h"
+void Field_resize (Field *this, double width, double height);
+struct private {
+	WINDOW *window;
+};
 
 struct stack *Fields = NULL;
 
-struct Field {
-	Size *size;
-	WINDOW *window;
-};
 Field *Field__delete (Field *this)
 {
+	Private__delete(this->private);
 	Size__delete(this->size);
-	delwin(this->window);
+	delwin(((struct private *) (this->private))->window);
 	free(this);
 	Fields = stack_pop(stack_find(Fields, this));
 	return NULL;
 }
+
 Field *Field__new (void)
 {
 	Field *this = malloc(sizeof(*this));
 	if (this) {
 		*this = (Field) {
-			.size = Size__new(),
+			.private = Private__new(this, sizeof(struct private)),
+			.size = Size__new(this, (struct Size__callbacks) {}),
+		};
+
+		*((struct private *) (this->private)) = (struct private) {
 			.window = NULL,
 		};
-		Field_resize(this, (int) FIELD_SIZE_WIDTH, FIELD_SIZE_HEIGHT);
+		Field_resize(this, FIELD_SIZE_WIDTH, FIELD_SIZE_HEIGHT);
 		Fields = stack_push(Fields, this);
 	}
 	return this;
-}
-
-/* Interface: Size */
-inline double Field_getHeight (Field *this) { return Size_getHeight(this->size); }
-inline double Field_getWidth (Field *this) { return Size_getWidth(this->size); }
-void Field_resize (Field *this, double width, double height) {
-	delwin(this->window);
-	this->window = newwin((int) height, (int) width, 0, 0);
-	Size_resize(this->size, width, height);
 }
 
 void Field_drawScore (Field *this, unsigned int score, int position)
@@ -72,7 +70,7 @@ void Field_drawScore (Field *this, unsigned int score, int position)
 	char *str = malloc(len + 1);
 	int pos_x = (position == FIELD_SCORE_POS_L)
 		? 2
-		: (int) Field_getWidth(this) - len - 2;
+		: (int) Size_getWidth(this->size) - len - 2;
 	int pos_y = 1;
 	snprintf(str, len + 1, "%u", score);
 	char_drawstr(Field_getWindow(this), pos_y, pos_x, str);
@@ -81,5 +79,12 @@ void Field_drawScore (Field *this, unsigned int score, int position)
 
 WINDOW *Field_getWindow (Field *this)
 {
-	return this->window;
+	return ((struct private *) (this->private))->window;
+}
+
+void Field_resize (Field *this, double width, double height) {
+	struct private *private = this->private;
+	delwin(private->window);
+	private->window = newwin((int) height, (int) width, 0, 0);
+	Size_resize(this->size, width, height);
 }

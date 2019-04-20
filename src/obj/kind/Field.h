@@ -25,6 +25,8 @@
 
 #include <curses.h>
 #include "lib/stack.h"
+#include "obj/role/Private.h"
+#include "obj/role/Size.h"
 
 #define FIELD_SIZE_HEIGHT 50.0
 #define FIELD_SIZE_WIDTH 80.0
@@ -34,18 +36,29 @@ enum {
 	FIELD_SCORE_POS_R,
 };
 
-/* Instances */
+/*
+ * Instances.
+ */
 struct stack *Fields;
 
-/* Base */
+/*
+ * Object.
+ */
+struct Field {
+	Private *private;
+	Size *size;
+};
 typedef struct Field Field;
-Field *Field__delete (Field *this);
-Field *Field__new (void);
 
-/* Interface: Size */
-double Field_getHeight (Field *this);
-double Field_getWidth (Field *this);
-void Field_resize (Field *this, double width, double height);
+/*
+ * Destructor.
+ */
+Field *Field__delete (Field *this);
+
+/*
+ * Constructor.
+ */
+Field *Field__new (void);
 
 /*
  * Draws a score to the field in one of two positions defined by

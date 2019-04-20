@@ -35,9 +35,10 @@ command c99 \
 	"${ROOT}/src/lib/util.c" \
 	"${ROOT}/src/mgr/input.c" \
 	"${ROOT}/src/mgr/time.c" \
-	"${ROOT}/src/obj/ifix/Coord.c" \
-	"${ROOT}/src/obj/ifix/Size.c" \
-	"${ROOT}/src/obj/ifix/Speed.c" \
+	"${ROOT}/src/obj/role/Coord.c" \
+	"${ROOT}/src/obj/role/Private.c" \
+	"${ROOT}/src/obj/role/Size.c" \
+	"${ROOT}/src/obj/role/Speed.c" \
 	"${ROOT}/src/obj/kind/Ball.c" \
 	"${ROOT}/src/obj/kind/Field.c" \
 	"${ROOT}/src/obj/kind/Paddle.c" \

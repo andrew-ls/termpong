@@ -20,47 +20,52 @@
  * along with this file. If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef INCLUDE_OBJ_IFIX_COORD_H
-#define INCLUDE_OBJ_IFIX_COORD_H
+#ifndef INCLUDE_OBJ_ROLE_COORD_H
+#define INCLUDE_OBJ_ROLE_COORD_H
 
 #include "lib/stack.h"
 
-/* Instances */
+/*
+ * Instances.
+ */
 struct stack *Coords;
 
-/* Base */
+/*
+ * Type.
+ */
 typedef struct Coord Coord;
-Coord *Coord__delete (Coord *this);
-Coord *Coord__new (void);
 
 /*
- * Implementation:
- * double ?_getX (? *this);
- *
+ * Callbacks.
+ */
+struct Coord__callbacks {};
+
+/*
+ * Destructor.
+ */
+Coord *Coord__delete (Coord *this);
+
+/*
+ * Constructor.
+ */
+Coord *Coord__new (void *assignee, struct Coord__callbacks callbacks);
+
+/*
  * Get the current X coordinate.
  */
 double Coord_getX (Coord *this);
 
 /*
- * Implementation:
- * double ?_getY (? *this);
- *
  * Get the current Y coordinate.
  */
 double Coord_getY (Coord *this);
 
 /*
- * Implementation:
- * void ?_shift (? *this, double x, double y);
- *
  * Repositions relatively.
  */
 void Coord_shift (Coord *this, double x, double y);
 
 /*
- * Implementation:
- * void ?_translocate (? *this, double x, double y);
- *
  * Repositions absolutely.
  */
 void Coord_translocate (Coord *this, double x, double y);
