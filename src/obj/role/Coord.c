@@ -24,45 +24,57 @@
 #include <stdlib.h>
 #include "lib/stack.h"
 
-#include "./Size.h"
+#include "./Coord.h"
 
-struct stack *Sizes = NULL;
+struct stack *Coords = NULL;
 
-struct Size {
-	double height;
-	double width;
+struct Coord {
+	void *assignee;
+	struct Coord__callbacks callbacks;
+	double x;
+	double y;
 };
-Size *Size__delete (Size *this)
+
+Coord *Coord__delete (Coord *this)
 {
 	free(this);
-	Sizes = stack_pop(stack_find(Sizes, this));
+	Coords = stack_pop(stack_find(Coords, this));
 	return NULL;
 }
-Size *Size__new (void)
+
+Coord *Coord__new (void *assignee, struct Coord__callbacks callbacks)
 {
-	Size *this = malloc(sizeof(*this));
+	Coord *this = malloc(sizeof(*this));
 	if (this) {
-		*this = (Size) {
-			.height = 0.0,
-			.width = 0.0,
+		*this = (Coord) {
+			.assignee = assignee,
+			.callbacks = callbacks,
+			.x = 0.0,
+			.y = 0.0,
 		};
-		Sizes = stack_push(Sizes, this);
+		Coords = stack_push(Coords, this);
 	}
 	return this;
 }
 
-double Size_getHeight (Size *this)
+double Coord_getX (Coord *this)
 {
-	return this->height;
+	return this->x;
 }
 
-double Size_getWidth (Size *this)
+double Coord_getY (Coord *this)
 {
-	return this->width;
+	return this->y;
 }
 
-void Size_resize (Size *this, double width, double height)
+void Coord_shift (Coord *this, double x, double y)
 {
-	this->width = width;
-	this->height = height;
+	this->x += x;
+	this->y += y;
+}
+
+void Coord_translocate (Coord *this, double x, double y)
+{
+	this->x = x;
+	this->y = y;
 }

@@ -20,39 +20,47 @@
  * along with this file. If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef INCLUDE_OBJ_IFIX_SIZE_H
-#define INCLUDE_OBJ_IFIX_SIZE_H
+#ifndef INCLUDE_OBJ_ROLE_SIZE_H
+#define INCLUDE_OBJ_ROLE_SIZE_H
 
 #include "lib/stack.h"
 
-/* Instances */
+/*
+ * Instances.
+*/
 struct stack *Sizes;
 
-/* Base */
+/*
+ * Type.
+*/
 typedef struct Size Size;
-Size *Size__delete (Size *this);
-Size *Size__new (void);
 
 /*
- * Implementation:
- * double ?_getHeight (? *this);
- *
+ * Callbacks.
+*/
+struct Size__callbacks {};
+
+/*
+ * Destructor.
+*/
+Size *Size__delete (Size *this);
+
+/*
+ * Constructor.
+*/
+Size *Size__new (void *assignee, struct Size__callbacks callbacks);
+
+/*
  * Returns the current height.
 */
 double Size_getHeight (Size *this);
 
 /*
- * Implementation:
- * double ?_getWidth (? *this);
- *
  * Returns the current width.
 */
 double Size_getWidth (Size *this);
 
 /*
- * Implementation:
- * void ?_resize (? *this, double width, double height);
- *
  * Resizes.
 */
 void Size_resize (Size *this, double width, double height);

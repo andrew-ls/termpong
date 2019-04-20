@@ -23,60 +23,59 @@
 #include <stddef.h>
 #include <stdlib.h>
 #include "lib/stack.h"
-#include "obj/ifix/Coord.h"
-#include "obj/ifix/Size.h"
-#include "obj/ifix/Speed.h"
+#include "obj/role/Coord.h"
+#include "obj/role/Private.h"
+#include "obj/role/Size.h"
+#include "obj/role/Speed.h"
 #include "obj/kind/Field.h"
 
 #include "./Ball.h"
+void Ball_translate (Ball *this, double x, double y);
+void Ball_translate_continuation (void *this, double x, double y);
+struct private {
+	Size *bounds;
+};
 
 struct stack *Balls = NULL;
 
-struct Ball {
-	Coord *coord;
-	Field *field;
-	Size *size;
-	Speed *speed;
-};
 Ball *Ball__delete (Ball *this)
 {
 	Coord__delete(this->coord);
+	Private__delete(this->private);
 	Size__delete(this->size);
 	Speed__delete(this->speed);
 	free(this);
 	Balls = stack_pop(stack_find(Balls, this));
 	return NULL;
 }
-Ball *Ball__new (Field *field)
+
+Ball *Ball__new (Size *bounds)
 {
 	Ball *this = malloc(sizeof(*this));
 	if (this) {
 		*this = (Ball) {
-			.coord = Coord__new(),
-			.field = field,
-			.size = Size__new(),
-			.speed = Speed__new(),
+			.coord = Coord__new(this, (struct Coord__callbacks) {}),
+			.private = Private__new(this, sizeof(struct private)),
+			.size = Size__new(this, (struct Size__callbacks) {}),
+			.speed = Speed__new(this, (struct Speed__callbacks) {
+				.translate = Ball_translate_continuation,
+			}),
 		};
-		Ball_resize(this, BALL_SIZE_WIDTH, BALL_SIZE_HEIGHT);
+
+		*((struct private *) (this->private)) = (struct private) {
+			.bounds = bounds,
+		};
+		Size_resize(this->size, BALL_SIZE_WIDTH, BALL_SIZE_HEIGHT);
 		Balls = stack_push(Balls, this);
 	}
 	return this;
 }
 
-/* Interface: Coord */
-inline double Ball_getX (Ball *this) { return Coord_getX(this->coord); }
-inline double Ball_getY (Ball *this) { return Coord_getY(this->coord); }
-inline void Ball_shift (Ball *this, double x, double y) { Coord_shift(this->coord, x, y); }
-inline void Ball_translocate (Ball *this, double x, double y) { Coord_translocate(this->coord, x, y); }
-
-/* Interface: Size */
-inline double Ball_getHeight (Ball *this) { return Size_getHeight(this->size); }
-inline double Ball_getWidth (Ball *this) { return Size_getWidth(this->size); }
-inline void Ball_resize (Ball *this, double width, double height) { Size_resize(this->size, width, height); }
-
-/* Interface: Speed */
-inline void Ball_accelerate (Ball *this, double x, double y) { Speed_accelerate(this->speed, x, y); }
-inline double Ball_getXSpeed (Ball *this) { return Speed_getXSpeed(this->speed); }
-inline double Ball_getYSpeed (Ball *this) { return Speed_getYSpeed(this->speed); }
-inline void Ball_propel (Ball *this, double x, double y) { Speed_propel(this->speed, x, y); }
-inline void Ball_translate (Ball *this, double mult) { Speed_translate(this->speed, mult, this, Ball_shift); }
+void Ball_translate (Ball *this, double x, double y)
+{
+	Coord_shift(this->coord, x, y);
+}
+void Ball_translate_continuation (void *this, double x, double y)
+{
+	Ball_translate((Ball *) this, x, y);
+}

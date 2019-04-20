@@ -24,59 +24,22 @@
 #include <stdlib.h>
 #include "lib/stack.h"
 
-#include "./Speed.h"
+#include "./Private.h"
 
-struct stack *Speeds = NULL;
-
-struct Speed {
-	double x;
-	double y;
-};
-Speed *Speed__delete (Speed *this)
+Private *Private__delete (Private *this)
 {
 	free(this);
-	Speeds = stack_pop(stack_find(Speeds, this));
+	Privates = stack_pop(stack_find(Privates, this));
 	return NULL;
 }
-Speed *Speed__new (void)
+
+Private *Private__new (void *parent, size_t size)
 {
-	Speed *this = malloc(sizeof(*this));
+	Private *this = malloc(size);
 	if (this) {
-		*this = (Speed) {
-			.x = 0.0,
-			.y = 0.0,
-		};
-		Speeds = stack_push(Speeds, this);
+		Privates = stack_push(Privates, this);
 	}
 	return this;
 }
 
-void Speed_accelerate (Speed *this, double x, double y)
-{
-	this->x += x;
-	this->y += y;
-}
-
-double Speed_getXSpeed (Speed *this)
-{
-	return this->x;
-}
-
-double Speed_getYSpeed (Speed *this)
-{
-	return this->y;
-}
-
-void Speed_propel (Speed *this, double x, double y)
-{
-	this->x = x;
-	this->y = y;
-}
-
-void Speed_translate (Speed *this,
-	double mult,
-	void *translator,
-	void (*translation)())
-{
-	translation(translator, this->x * mult, this->y * mult);
-}
+struct stack *Privates = NULL;
