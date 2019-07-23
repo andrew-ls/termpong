@@ -86,6 +86,13 @@ struct stack *stack_pop (
 );
 
 /*
+ * Prints the contents of a full stack.
+ */
+void stack_print (
+	struct stack *node
+);
+
+/*
  * Creates and returns a new stack node in memory, which is the new head node.
  * Use NULL for `next` if this is a new stack.
  */

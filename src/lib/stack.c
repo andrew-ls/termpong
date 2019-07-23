@@ -22,6 +22,7 @@
 
 #include <stdbool.h>
 #include <stddef.h>
+#include <stdio.h>
 #include <stdlib.h>
 
 #include "./stack.h"
@@ -79,6 +80,17 @@ struct stack *stack_pop (struct stack *node)
 	}
 	else {
 		return NULL;
+	}
+}
+
+void stack_print (struct stack *node)
+{
+	for (int i = 0; node; i++, node = node->next) {
+		printf("\n");
+		printf("%i: %p\n", i, (void *) node);
+		printf("PREV: %p\n", (void *) node->prev);
+		printf("NEXT: %p\n", (void *) node->next);
+		printf("BODY: %p\n", (void *) node->body);
 	}
 }
 
