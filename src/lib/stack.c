@@ -69,6 +69,9 @@ struct stack *stack_pop (struct stack *node)
 	if (node) {
 		struct stack *headnode;
 		if (stack_ishead(node)) {
+			if (node->next) {
+				node->next->prev = NULL;
+			}
 			headnode = node->next;
 		}
 		else {

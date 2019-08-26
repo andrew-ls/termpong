@@ -7,7 +7,3 @@
   Debian has `libncursesw.so.5` as the latest ncursesw shared object.
   For compilation on Fedora to be backwards compatible, `libncursesw.so.5` must
   be linked against. The package `ncurses-compat-libs` provides this.
-* Investigate "free(): double free detected in tcache 2" crash error. Manifests
-  when mashing keys: this may be due to multiple inputs being received on the
-  same tick. The tickrate is currently unlimited (tiny frame of opportunity),
-  which is probably why the error hasn't manifested without looking for it.
