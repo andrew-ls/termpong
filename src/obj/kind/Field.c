@@ -1,7 +1,7 @@
 /*
  * This file is part of termpong.
  *
- * Copyright (c) 2019 Andrew Steel <copyright@andrewsteel.net>
+ * Copyright (c) 2019,2022 Andrew Steel <copyright@andrewsteel.net>
  *
  * SPDX-License-Identifier: GPL-3.0-only
  *
@@ -41,8 +41,8 @@ Field *Field__delete (Field *this)
 	Private__delete(this->private);
 	Size__delete(this->size);
 	delwin(((struct private *) (this->private))->window);
-	free(this);
 	Fields = stack_pop(stack_find(Fields, this));
+	free(this);
 	return NULL;
 }
 

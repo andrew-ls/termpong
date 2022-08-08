@@ -1,7 +1,7 @@
 /*
  * This file is part of termpong.
  *
- * Copyright (c) 2019 Andrew Steel <copyright@andrewsteel.net>
+ * Copyright (c) 2019,2022 Andrew Steel <copyright@andrewsteel.net>
  *
  * SPDX-License-Identifier: GPL-3.0-only
  *
@@ -44,8 +44,8 @@ Ball *Ball__delete (Ball *this)
 	Private__delete(this->private);
 	Size__delete(this->size);
 	Speed__delete(this->speed);
-	free(this);
 	Balls = stack_pop(stack_find(Balls, this));
+	free(this);
 	return NULL;
 }
 
