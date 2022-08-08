@@ -1,7 +1,7 @@
 /*
  * This file is part of termpong.
  *
- * Copyright (c) 2019 Andrew Steel <copyright@andrewsteel.net>
+ * Copyright (c) 2019,2022 Andrew Steel <copyright@andrewsteel.net>
  *
  * SPDX-License-Identifier: GPL-3.0-only
  *
@@ -28,7 +28,7 @@
 /*
  * Instances.
  */
-struct stack *Speeds;
+extern struct stack *Speeds;
 
 /*
  * Type.
