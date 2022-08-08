@@ -1,7 +1,7 @@
 /*
  * This file is part of termpong.
  *
- * Copyright (c) 2019 Andrew Steel <copyright@andrewsteel.net>
+ * Copyright (c) 2019,2022 Andrew Steel <copyright@andrewsteel.net>
  *
  * SPDX-License-Identifier: GPL-3.0-only
  *
@@ -50,6 +50,9 @@ struct stack *stack_findval (
 		: NULL;
 }
 
+/*
+ * Returns the head of a stack.
+ */
 struct stack *stack_gethead (struct stack *node)
 {
 	return node
@@ -59,6 +62,9 @@ struct stack *stack_gethead (struct stack *node)
 		: NULL;
 }
 
+/*
+ * Returns whether a node is the head of a stack.
+ */
 inline bool stack_ishead (struct stack *node)
 {
 	return node->prev == NULL;
