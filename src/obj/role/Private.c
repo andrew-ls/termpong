@@ -40,6 +40,9 @@ Private *Private__new (void *parent, size_t size)
 	Private *this = malloc(size);
 	if (this) {
 		Privates = stack_push(Privates, this);
+
+		return this;
 	}
-	return this;
+
+	return NULL;
 }

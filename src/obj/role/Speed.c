@@ -52,8 +52,11 @@ Speed *Speed__new (void *assignee, struct Speed__callbacks callbacks)
 			.y = 0.0,
 		};
 		Speeds = stack_push(Speeds, this);
+
+		return this;
 	}
-	return this;
+
+	return NULL;
 }
 
 void Speed_accelerate (Speed *this, double x, double y)

@@ -70,8 +70,11 @@ Paddle *Paddle__new (Size *bounds)
 		};
 		Size_resize(this->size, PADDLE_SIZE_WIDTH, PADDLE_SIZE_HEIGHT);
 		Paddles = stack_push(Paddles, this);
+
+		return this;
 	}
-	return this;
+
+	return NULL;
 }
 
 void Paddle_applyFriction (Paddle *this, double friction, double mult)

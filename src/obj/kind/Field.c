@@ -60,8 +60,11 @@ Field *Field__new (void)
 		};
 		Field_resize(this, FIELD_SIZE_WIDTH, FIELD_SIZE_HEIGHT);
 		Fields = stack_push(Fields, this);
+
+		return this;
 	}
-	return this;
+
+	return NULL;
 }
 
 void Field_drawScore (Field *this, unsigned int score, int position)

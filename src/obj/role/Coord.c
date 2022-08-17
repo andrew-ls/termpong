@@ -52,8 +52,11 @@ Coord *Coord__new (void *assignee, struct Coord__callbacks callbacks)
 			.y = 0.0,
 		};
 		Coords = stack_push(Coords, this);
+
+		return this;
 	}
-	return this;
+
+	return NULL;
 }
 
 double Coord_getX (Coord *this)

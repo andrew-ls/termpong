@@ -52,8 +52,11 @@ Size *Size__new (void *assignee, struct Size__callbacks callbacks)
 			.width = 0.0,
 		};
 		Sizes = stack_push(Sizes, this);
+
+		return this;
 	}
-	return this;
+
+	return NULL;
 }
 
 double Size_getHeight (Size *this)

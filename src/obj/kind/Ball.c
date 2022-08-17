@@ -67,8 +67,11 @@ Ball *Ball__new (Size *bounds)
 		};
 		Size_resize(this->size, BALL_SIZE_WIDTH, BALL_SIZE_HEIGHT);
 		Balls = stack_push(Balls, this);
+
+		return this;
 	}
-	return this;
+
+	return NULL;
 }
 
 void Ball_translate (Ball *this, double x, double y)
