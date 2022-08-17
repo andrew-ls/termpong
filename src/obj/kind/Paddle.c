@@ -32,11 +32,11 @@
 
 #include "./Paddle.h"
 void Paddle_translate (Paddle *this, double x, double y);
-void Paddle_translate_continuation (void *this, double x, double y);
 struct private {
 	Size *bounds;
 	double momentum;
 };
+static void Speed_callback_translate (void *assignee, double x, double y);
 
 struct stack *Paddles = NULL;
 
@@ -60,7 +60,7 @@ Paddle *Paddle__new (Size *bounds)
 			.private = Private__new(this, sizeof(struct private)),
 			.size = Size__new(this, (struct Size__callbacks) {}),
 			.speed = Speed__new(this, (struct Speed__callbacks) {
-				.translate = Paddle_translate_continuation,
+				.translate = Speed_callback_translate,
 			}),
 		};
 
@@ -162,7 +162,8 @@ void Paddle_translate (Paddle *this, double x, double y)
 		}
 	}
 }
-void Paddle_translate_continuation (void *this, double x, double y)
+
+static void Speed_callback_translate (void *assignee, double x, double y)
 {
-	Paddle_translate((Paddle *) this, x, y);
+	Paddle_translate((Paddle *) assignee, x, y);
 }

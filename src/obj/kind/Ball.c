@@ -31,10 +31,10 @@
 
 #include "./Ball.h"
 void Ball_translate (Ball *this, double x, double y);
-void Ball_translate_continuation (void *this, double x, double y);
 struct private {
 	Size *bounds;
 };
+static void Speed_callback_translate (void *assignee, double x, double y);
 
 struct stack *Balls = NULL;
 
@@ -58,7 +58,7 @@ Ball *Ball__new (Size *bounds)
 			.private = Private__new(this, sizeof(struct private)),
 			.size = Size__new(this, (struct Size__callbacks) {}),
 			.speed = Speed__new(this, (struct Speed__callbacks) {
-				.translate = Ball_translate_continuation,
+				.translate = Speed_callback_translate,
 			}),
 		};
 
@@ -74,11 +74,13 @@ Ball *Ball__new (Size *bounds)
 	return NULL;
 }
 
-void Ball_translate (Ball *this, double x, double y)
+void Ball_translate (Ball *assignee, double x, double y)
 {
+	Ball *this = assignee;
 	Coord_shift(this->coord, x, y);
 }
-void Ball_translate_continuation (void *this, double x, double y)
+
+static void Speed_callback_translate (void *assignee, double x, double y)
 {
-	Ball_translate((Ball *) this, x, y);
+	Ball_translate((Ball *) assignee, x, y);
 }
