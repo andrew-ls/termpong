@@ -30,7 +30,6 @@ struct stack *Privates = NULL;
 
 Private *Private__delete (Private *this)
 {
-	Privates = stack_pop(stack_find(Privates, this));
 	free(this);
 	return NULL;
 }
@@ -39,8 +38,6 @@ Private *Private__new (void *parent, size_t size)
 {
 	Private *this = malloc(size);
 	if (this) {
-		Privates = stack_push(Privates, this);
-
 		return this;
 	}
 

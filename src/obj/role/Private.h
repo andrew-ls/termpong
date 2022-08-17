@@ -36,11 +36,6 @@
 #include "lib/stack.h"
 
 /*
- * Instances.
- */
-extern struct stack *Privates;
-
-/*
  * Type.
  */
 typedef void Private;
