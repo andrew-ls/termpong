@@ -1,3 +1,5 @@
+# FIXME
+
 * Fix building on Debian: linker fails with `cannot find -lcursesw`.
   Changing the linker to use `-lncursesw` fixes this, however the compiler
   still cannot find wide character functions such as `waddwstr`.
