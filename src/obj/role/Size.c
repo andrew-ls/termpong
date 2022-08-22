@@ -34,11 +34,10 @@ struct Size {
 
 struct stack *Sizes = NULL;
 
-Size *Size__delete (Size *this)
+void Size__delete (Size *this)
 {
 	Sizes = stack_pop(stack_find(Sizes, this));
 	free(this);
-	return NULL;
 }
 
 Size *Size__new (void *assignee, struct Size__callbacks callbacks)

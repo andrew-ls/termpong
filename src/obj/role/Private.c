@@ -28,10 +28,9 @@
 
 struct stack *Privates = NULL;
 
-Private *Private__delete (Private *this)
+void Private__delete (Private *this)
 {
 	free(this);
-	return NULL;
 }
 
 Private *Private__new (void *parent, size_t size)

@@ -34,11 +34,10 @@ struct Speed {
 
 struct stack *Speeds = NULL;
 
-Speed *Speed__delete (Speed *this)
+void Speed__delete (Speed *this)
 {
 	Speeds = stack_pop(stack_find(Speeds, this));
 	free(this);
-	return NULL;
 }
 
 Speed *Speed__new (void *assignee, struct Speed__callbacks callbacks)

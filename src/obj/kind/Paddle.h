@@ -64,7 +64,7 @@ typedef struct Paddle Paddle;
 /*
  * Destructor.
  */
-Paddle *Paddle__delete (Paddle *this);
+void Paddle__delete (Paddle *this);
 
 /*
  * Constructor.

@@ -51,7 +51,7 @@ typedef struct Ball Ball;
 /*
  * Destructor.
  */
-Ball *Ball__delete (Ball *this);
+void Ball__delete (Ball *this);
 
 /*
  * Constructor.

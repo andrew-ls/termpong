@@ -45,7 +45,7 @@ struct Speed__callbacks {
 /*
  * Destructor.
  */
-Speed *Speed__delete (Speed *this);
+void Speed__delete (Speed *this);
 
 /*
  * Constructor.

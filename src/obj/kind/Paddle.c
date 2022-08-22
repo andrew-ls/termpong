@@ -40,7 +40,7 @@ static void Speed_callback_translate (void *assignee, double x, double y);
 
 struct stack *Paddles = NULL;
 
-Paddle *Paddle__delete (Paddle *this)
+void Paddle__delete (Paddle *this)
 {
 	Coord__delete(this->coord);
 	Private__delete(this->private);
@@ -48,7 +48,6 @@ Paddle *Paddle__delete (Paddle *this)
 	Speed__delete(this->speed);
 	Paddles = stack_pop(stack_find(Paddles, this));
 	free(this);
-	return NULL;
 }
 
 Paddle *Paddle__new (Size *bounds)

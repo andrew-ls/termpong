@@ -38,7 +38,7 @@ static void Speed_callback_translate (void *assignee, double x, double y);
 
 struct stack *Balls = NULL;
 
-Ball *Ball__delete (Ball *this)
+void Ball__delete (Ball *this)
 {
 	Coord__delete(this->coord);
 	Private__delete(this->private);
@@ -46,7 +46,6 @@ Ball *Ball__delete (Ball *this)
 	Speed__delete(this->speed);
 	Balls = stack_pop(stack_find(Balls, this));
 	free(this);
-	return NULL;
 }
 
 Ball *Ball__new (Size *bounds)

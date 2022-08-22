@@ -34,11 +34,10 @@ struct Coord {
 
 struct stack *Coords = NULL;
 
-Coord *Coord__delete (Coord *this)
+void Coord__delete (Coord *this)
 {
 	Coords = stack_pop(stack_find(Coords, this));
 	free(this);
-	return NULL;
 }
 
 Coord *Coord__new (void *assignee, struct Coord__callbacks callbacks)

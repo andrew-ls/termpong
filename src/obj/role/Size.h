@@ -43,7 +43,7 @@ struct Size__callbacks {};
 /*
  * Destructor.
  */
-Size *Size__delete (Size *this);
+void Size__delete (Size *this);
 
 /*
  * Constructor.

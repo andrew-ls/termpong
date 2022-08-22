@@ -36,14 +36,13 @@ struct private {
 
 struct stack *Fields = NULL;
 
-Field *Field__delete (Field *this)
+void Field__delete (Field *this)
 {
 	Private__delete(this->private);
 	Size__delete(this->size);
 	delwin(((struct private *) (this->private))->window);
 	Fields = stack_pop(stack_find(Fields, this));
 	free(this);
-	return NULL;
 }
 
 Field *Field__new (void)

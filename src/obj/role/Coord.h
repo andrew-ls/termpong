@@ -43,7 +43,7 @@ struct Coord__callbacks {};
 /*
  * Destructor.
  */
-Coord *Coord__delete (Coord *this);
+void Coord__delete (Coord *this);
 
 /*
  * Constructor.

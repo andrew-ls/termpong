@@ -53,7 +53,7 @@ typedef struct Field Field;
 /*
  * Destructor.
  */
-Field *Field__delete (Field *this);
+void Field__delete (Field *this);
 
 /*
  * Constructor.

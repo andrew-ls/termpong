@@ -43,7 +43,7 @@ typedef void Private;
 /*
  * Destructor.
  */
-Private *Private__delete (Private *this);
+void Private__delete (Private *this);
 
 /*
  * Constructor.
